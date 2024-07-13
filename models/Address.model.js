@@ -33,3 +33,7 @@ const addressSchema = new Schema(
     {
         timestamps: true,
     });
+
+const Address = model("Address", addressSchema);
+
+module.exports = Address;
