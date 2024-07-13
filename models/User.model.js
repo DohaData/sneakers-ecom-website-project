@@ -11,10 +11,6 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      match: [
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-        "Password must contain at least 8 characters, one letter and one number",
-      ],
     },
     cart: {
       type: Schema.Types.ObjectId,
