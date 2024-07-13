@@ -1,24 +1,37 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const userSchema = new Schema(
   {
-    username: {
-      type: String,
-      required: false,
-      unique: true,
-      trim: true,
-    },
     email: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
       lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
     },
     password: {
       type: String,
+      match: [
+        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+        "Password must contain at least 8 characters, one letter and one number",
+      ],
+    },
+    cart: {
+      type: Schema.Types.ObjectId,
+      ref: "Cart",
+    },
+    address: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
+    isSignedUp: {
+      type: Boolean,
+      default: false,
       required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   {
