@@ -1,22 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 
 /* Global Styles */
 body {
   color: #333;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #333;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
 }
 
+a {
+  text-decoration: none;
+  color: #336699;
+}
+
 #website-logo {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 24px;
@@ -26,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #main-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 36px;
@@ -41,18 +51,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .secondary-text {
   color: #757575;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
 }
 
 .button {
   background-color: #336699;
   color: #fff;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 8px 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -134,7 +144,7 @@ header {
 .carousel-inner {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 700px;
   overflow: hidden;
 }
 
@@ -194,7 +204,7 @@ header {
 .footer {
   text-align: center;
   padding: 20px 0;
-  width: 100%;
+  background-color: #f9f9f9;
 }
 
 .footer h5 {
@@ -210,7 +220,7 @@ header {
 .footer .social-icons a {
   color: #1e1e1e;
   margin: 0 5px;
-  font-size: 10px;
+  font-size: 16px;
   transition: color 0.3s ease;
 }
 
@@ -225,24 +235,268 @@ header {
 /* Page Content */
 .promo-text {
   color: #336699;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
 }
 
 .eco-tag {
   color: #228b22;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
 }
 
 .subtle-text {
   color: #bdbdbd;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
 }
 
 .background-highlight {
   background-color: #f5f5f5;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 400;
+}
+
+/* Product Cards */
+
+.card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.product-card {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.product-card .card {
+  flex: 1 0 100%;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.product-card .card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card .card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-card .card-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.product-card .card-text {
+  font-size: 14px;
+  color: #757575;
+  margin-bottom: 5px;
+}
+
+.product-card button.btn-primary {
+  background-color: #336699;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.product-card button.btn-primary:hover {
+  background-color: #336699;
+}
+
+.btn-primary {
+  background-color: #336699;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #336699;
+}
+
+/* Filters */
+.filters {
+  margin-bottom: 8px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+.filters h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.filters .form-group {
+  margin-bottom: 20px;
+}
+
+.filters label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+section.range-slider {
+  position: relative;
+  width: 30vw;
+  margin: 8px 0; /* Adjust margin for better spacing */
+  height: 16px; /* Maintain height for thumb visibility */
+  text-align: left; /* Align slider to the left */
+}
+
+section.range-slider p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f5f5f5;
+  margin-bottom: 8px;
+  text-align: center; /* Center text */
+}
+
+section.range-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
+  left: 0;
+  top: 50%; /* Center vertically */
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+  background: transparent;
+}
+
+section.range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: all;
+  width: 12px;
+  height: 12px;
+  background: #f5f5f5; /* Dark grey thumb */
+  border: 2px solid #f5f5f5; /* White border */
+  border-radius: 3px; /* Rectangular with rounded corners */
+  cursor: pointer;
+  z-index: 3;
+  position: relative;
+  transform: rotate(45deg); /* Make it a diamond */
+}
+
+section.range-slider input[type="range"]::-moz-range-thumb {
+  pointer-events: all;
+  width: 12px;
+  height: 12px;
+  background: #f5f5f5; /* Dark grey thumb */
+  border: 2px solid #f5f5f5; /* White border */
+  border-radius: 3px; /* Rectangular with rounded corners */
+  cursor: pointer;
+  z-index: 3;
+  position: relative;
+  transform: rotate(45deg); /* Make it a diamond */
+}
+
+section.range-slider input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px; /* Thinner track */
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  z-index: 1;
+  position: relative;
+}
+
+section.range-slider input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 4px; /* Thinner track */
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  z-index: 1;
+  position: relative;
+}
+
+.rangeValues {
+  position: relative;
+  z-index: 3;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center; /* Center text */
+  color: #333; /* Dark grey text */
+}
+
+.filters .form-control {
+  width: 30vw;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filters select.form-control {
+  height: 40px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.filter-buttons a {
+  margin-left: 10px;
+}
+
+.filters h4 {
+  font-size: 14px;
+}
+
+.filters option {
+  font-size: 14px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .product-card .card {
+    flex: 1 0 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    padding: 15px;
+  }
+
+  .product-card .card-img-top {
+    height: 180px;
+  }
+
+  .product-card .card-title {
+    font-size: 16px;
+  }
+
+  .product-card .card-text {
+    font-size: 13px;
+  }
 }
