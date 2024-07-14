@@ -1,12 +1,47 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #333333;
+  font-family: 'Roboto', sans-serif;
 }
 
-a {
-  color: #00b7ff;
+h1, h2, h3, h4, h5, h6 {
+  color: #000000;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
 }
 
-h1 {
-  color: 15px;
+.secondary-text {
+  color: #696969;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.button {
+  background-color: #1E90FF;
+  color: #FFFFFF;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.promo-text {
+  color: #DC143C;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+
+.eco-tag {
+  color: #228B22;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.subtle-text {
+  color: #C0C0C0;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.background-highlight {
+  background-color: #F5F5F5;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
 }
