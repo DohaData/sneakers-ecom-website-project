@@ -22,38 +22,44 @@ router.get("/signup", isLoggedOut, (req, res) => {
 
 // POST /auth/signup
 router.post("/signup", isLoggedOut, (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password, confirmPassword } = req.body;
 
-  // Check that username, email, and password are provided
-  if (username === "" || email === "" || password === "") {
+  // Check that email, and password are provided
+  if (email === "" || password === "") {
     res.status(400).render("auth/signup", {
       errorMessage:
-        "All fields are mandatory. Please provide your username, email and password.",
+        "All fields are mandatory. Please provide your email and password.",
     });
 
     return;
   }
 
-  if (password.length < 6) {
+  // Email validation
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailPattern.test(email)) {
     res.status(400).render("auth/signup", {
-      errorMessage: "Your password needs to be at least 6 characters long.",
-    });
-
-    return;
-  }
-
-  //   ! This regular expression checks password for special characters and minimum length
-  /*
-  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  if (!regex.test(password)) {
-    res
-      .status(400)
-      .render("auth/signup", {
-        errorMessage: "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter."
+      errorMessage: "Please enter a valid email address.",
     });
     return;
   }
-  */
+
+  // Password validation
+  const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+  if (!passwordPattern.test(password)) {
+    res.status(400).render("auth/signup", {
+      errorMessage:
+        "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
+    });
+    return;
+  }
+
+  // Confirm password validation
+  if (password !== confirmPassword) {
+    res.status(400).render("auth/signup", {
+      errorMessage: "Passwords do not match.",
+    });
+    return;
+  }
 
   // Create a new user - start by hashing the password
   bcrypt
@@ -61,7 +67,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
     .then((salt) => bcrypt.hash(password, salt))
     .then((hashedPassword) => {
       // Create a user and save it in the database
-      return User.create({ username, email, password: hashedPassword });
+      return User.create({ email, password: hashedPassword, isSignedUp: true });
     })
     .then((user) => {
       res.redirect("/auth/login");
@@ -71,8 +77,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
         res.status(500).render("auth/signup", { errorMessage: error.message });
       } else if (error.code === 11000) {
         res.status(500).render("auth/signup", {
-          errorMessage:
-            "Username and email need to be unique. Provide a valid username or email.",
+          errorMessage: "email needs to be unique. Provide a valid email.",
         });
       } else {
         next(error);
@@ -87,13 +92,13 @@ router.get("/login", isLoggedOut, (req, res) => {
 
 // POST /auth/login
 router.post("/login", isLoggedOut, (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
-  // Check that username, email, and password are provided
-  if (username === "" || email === "" || password === "") {
+  // Check that email, and password are provided
+  if (email === "" || password === "") {
     res.status(400).render("auth/login", {
       errorMessage:
-        "All fields are mandatory. Please provide username, email and password.",
+        "All fields are mandatory. Please provide email and password.",
     });
 
     return;
@@ -118,7 +123,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
         return;
       }
 
-      // If user is found based on the username, check if the in putted password matches the one saved in the database
+      // If user is found based on the check if the in putted password matches the one saved in the database
       bcrypt
         .compare(password, user.password)
         .then((isSamePassword) => {
