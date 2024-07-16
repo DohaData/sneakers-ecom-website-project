@@ -503,13 +503,6 @@ section.range-slider input[type="range"]::-moz-range-track {
 
 
 /*Style for the product page */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .product-details {
   display: flex;
   align-items: flex-start;
