@@ -1,21 +1,24 @@
 <div id="form">
   <h2>Sign Up</h2>
-  <form action="/auth/signup" method="POST">
+  <form id="signupForm" action="/auth/signup" method="POST">
 
-    <label> Username
-      <input type="text" name="username" placeholder="Your username" />
-    </label>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Your email" required />
+    </div>
 
-    <label> Email
-      <input type="email" name="email" placeholder="Your email" />
-    </label>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="Your password" required />
+      <div id="passwordHelp" class="form-text">Must be at least 8 characters long and contain a mix of letters, numbers, and special characters.</div>
+    </div>
 
-    <label> Password
-      <input type="password" name="password" placeholder="Your password" />
-    </label>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password</label>
+      <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required />
+    </div>
 
-    <button type="submit">Sign Up</button>
-
+    <button type="submit" class="btn btn-primary">Sign Up</button>
 
     {{#if errorMessage}}
       <p class="error">{{errorMessage}}</p>

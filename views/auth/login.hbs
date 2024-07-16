@@ -2,20 +2,15 @@
   <h2>Log In</h2>
   <form action="/auth/login" method="POST">
 
-    <label> Username
-      <input type="text" name="username" placeholder="Your username" />
+    <label class="form-label"> Email
+      <input type="email" name="email" class="form-control" placeholder="Your email" />
     </label>
 
-    <label> Email
-      <input type="email" name="email" placeholder="Your email" />
+    <label class="form-label"> Password
+      <input type="password" name="password" class="form-control" placeholder="Your password" />
     </label>
 
-    <label> Password
-      <input type="password" name="password" placeholder="Your password" />
-    </label>
-
-    <button type="submit">Log In</button>
-
+    <button type="submit" class="btn btn-primary">Log In</button>
 
     {{#if errorMessage}}
       <p class="error">{{errorMessage}}</p>
