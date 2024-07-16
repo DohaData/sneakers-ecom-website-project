@@ -500,3 +500,66 @@ section.range-slider input[type="range"]::-moz-range-track {
     font-size: 13px;
   }
 }
+
+
+/*Style for the product page */
+.product-details {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.product-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-info {
+  margin-left: 20px;
+  flex: 1;
+}
+
+.product-info h1 {
+  margin: 0;
+  font-size: 2em;
+  color: #333;
+}
+
+.product-info p {
+  margin: 10px 0;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.product-info input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.product-info button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.product-info button:hover {
+  background-color: #0056b3;
+}
+
+.product-description {
+  margin-top: 20px;
+  font-size: 1.1em;
+  color: #444;
+}
