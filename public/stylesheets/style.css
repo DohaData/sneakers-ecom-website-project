@@ -356,9 +356,12 @@ header {
 section.range-slider {
   position: relative;
   width: 30vw;
-  margin: 8px 0; /* Adjust margin for better spacing */
-  height: 16px; /* Maintain height for thumb visibility */
-  text-align: left; /* Align slider to the left */
+  margin: 8px 0;
+  /* Adjust margin for better spacing */
+  height: 16px;
+  /* Maintain height for thumb visibility */
+  text-align: left;
+  /* Align slider to the left */
 }
 
 section.range-slider p {
@@ -366,7 +369,8 @@ section.range-slider p {
   font-weight: 600;
   color: #f5f5f5;
   margin-bottom: 8px;
-  text-align: center; /* Center text */
+  text-align: center;
+  /* Center text */
 }
 
 section.range-slider input[type="range"] {
@@ -377,7 +381,8 @@ section.range-slider input[type="range"] {
   pointer-events: none;
   overflow: hidden;
   left: 0;
-  top: 50%; /* Center vertically */
+  top: 50%;
+  /* Center vertically */
   margin: 0;
   padding: 0;
   z-index: 2;
@@ -390,31 +395,40 @@ section.range-slider input[type="range"]::-webkit-slider-thumb {
   pointer-events: all;
   width: 12px;
   height: 12px;
-  background: #f5f5f5; /* Dark grey thumb */
-  border: 2px solid #f5f5f5; /* White border */
-  border-radius: 3px; /* Rectangular with rounded corners */
+  background: #f5f5f5;
+  /* Dark grey thumb */
+  border: 2px solid #f5f5f5;
+  /* White border */
+  border-radius: 3px;
+  /* Rectangular with rounded corners */
   cursor: pointer;
   z-index: 3;
   position: relative;
-  transform: rotate(45deg); /* Make it a diamond */
+  transform: rotate(45deg);
+  /* Make it a diamond */
 }
 
 section.range-slider input[type="range"]::-moz-range-thumb {
   pointer-events: all;
   width: 12px;
   height: 12px;
-  background: #f5f5f5; /* Dark grey thumb */
-  border: 2px solid #f5f5f5; /* White border */
-  border-radius: 3px; /* Rectangular with rounded corners */
+  background: #f5f5f5;
+  /* Dark grey thumb */
+  border: 2px solid #f5f5f5;
+  /* White border */
+  border-radius: 3px;
+  /* Rectangular with rounded corners */
   cursor: pointer;
   z-index: 3;
   position: relative;
-  transform: rotate(45deg); /* Make it a diamond */
+  transform: rotate(45deg);
+  /* Make it a diamond */
 }
 
 section.range-slider input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 4px; /* Thinner track */
+  height: 4px;
+  /* Thinner track */
   cursor: pointer;
   background: transparent;
   border: 0;
@@ -424,7 +438,8 @@ section.range-slider input[type="range"]::-webkit-slider-runnable-track {
 
 section.range-slider input[type="range"]::-moz-range-track {
   width: 100%;
-  height: 4px; /* Thinner track */
+  height: 4px;
+  /* Thinner track */
   cursor: pointer;
   background: transparent;
   border: 0;
@@ -437,8 +452,10 @@ section.range-slider input[type="range"]::-moz-range-track {
   z-index: 3;
   font-size: 14px;
   margin-top: 8px;
-  text-align: center; /* Center text */
-  color: #333; /* Dark grey text */
+  text-align: center;
+  /* Center text */
+  color: #333;
+  /* Dark grey text */
 }
 
 .filters .form-control {
@@ -499,4 +516,202 @@ section.range-slider input[type="range"]::-moz-range-track {
   .product-card .card-text {
     font-size: 13px;
   }
+}
+
+
+/*Style for the product page */
+.product-details {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.product-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-info {
+  margin-left: 20px;
+  flex: 1;
+}
+
+.product-info h1 {
+  margin: 0;
+  font-size: 2em;
+  color: #333;
+}
+
+.product-info p {
+  margin: 10px 0;
+  font-size: 1.2em;
+  color: #666;
+}
+
+.product-info input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.product-info button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.product-info button:hover {
+  background-color: #0056b3;
+}
+
+.product-description {
+  margin-top: 20px;
+  font-size: 1.1em;
+  color: #444;
+}
+
+/* signup form */
+#form {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 20px auto;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#form h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+#form .form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+#form .form-control {
+  width: 30vw;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+#passwordHelp {
+  font-size: 12px;
+  color: #757575;
+  width: 30vw;
+}
+
+#form .btn-primary {
+  background-color: #336699;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+}
+
+#form .btn-primary:hover {
+  background-color: #336699;
+}
+
+#form .error {
+  color: #e57373;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+#form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* login form */
+#login-form {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 20px auto;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#login-form h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+#login-form .form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+#login-form .form-control {
+  width: 30vw;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+#login-form .btn-primary {
+  background-color: #336699;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+#login-form .btn-primary:hover {
+  background-color: #336699;
+}
+
+#login-form .error {
+  color: #e57373;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+#login-form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }

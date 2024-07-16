@@ -60,6 +60,7 @@
   </div>
   <!-- Products Grid -->
   <div class="row">
+    {{#if products}}
     {{#each products}}
       <div class="col-md-4 product-card flex-column">
         <div class="card">
@@ -78,5 +79,8 @@
         </div>
       </div>
     {{/each}}
+    {{else}}
+      <p>No products matching the selection found</p>
+    {{/if}}
   </div>
 </div>
