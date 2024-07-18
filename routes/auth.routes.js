@@ -10,8 +10,9 @@ const saltRounds = 10;
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
+const Cart = require("../models/Cart.model");
 
-// Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
+// Require necessary middleware to control access to specific routes
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 
@@ -21,68 +22,71 @@ router.get("/signup", isLoggedOut, (req, res) => {
 });
 
 // POST /auth/signup
-router.post("/signup", isLoggedOut, (req, res) => {
+router.post("/signup", isLoggedOut, async (req, res) => {
   const { email, password, confirmPassword } = req.body;
 
   // Check that email, and password are provided
   if (email === "" || password === "") {
-    res.status(400).render("auth/signup", {
+    return res.status(400).render("auth/signup", {
       errorMessage:
         "All fields are mandatory. Please provide your email and password.",
     });
-
-    return;
   }
 
   // Email validation
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (!emailPattern.test(email)) {
-    res.status(400).render("auth/signup", {
+    return res.status(400).render("auth/signup", {
       errorMessage: "Please enter a valid email address.",
     });
-    return;
   }
 
   // Password validation
   const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
   if (!passwordPattern.test(password)) {
-    res.status(400).render("auth/signup", {
+    return res.status(400).render("auth/signup", {
       errorMessage:
         "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
     });
-    return;
   }
 
   // Confirm password validation
   if (password !== confirmPassword) {
-    res.status(400).render("auth/signup", {
+    return res.status(400).render("auth/signup", {
       errorMessage: "Passwords do not match.",
     });
-    return;
   }
 
-  // Create a new user - start by hashing the password
-  bcrypt
-    .genSalt(saltRounds)
-    .then((salt) => bcrypt.hash(password, salt))
-    .then((hashedPassword) => {
-      // Create a user and save it in the database
-      return User.create({ email, password: hashedPassword, isSignedUp: true });
-    })
-    .then((user) => {
-      res.redirect("/auth/login");
-    })
-    .catch((error) => {
-      if (error instanceof mongoose.Error.ValidationError) {
-        res.status(500).render("auth/signup", { errorMessage: error.message });
-      } else if (error.code === 11000) {
-        res.status(500).render("auth/signup", {
-          errorMessage: "email needs to be unique. Provide a valid email.",
-        });
-      } else {
-        next(error);
-      }
+  try {
+    // Create a new cart for the user
+    const cart = await Cart.create({
+      products: [],
+      totalAmount: 0
     });
+
+    // Hash the password and create the user
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      email,
+      password: hashedPassword,
+      isSignedUp: true,
+      cart: cart._id  // Associate the cart with the user
+    });
+
+    res.redirect("/auth/login");
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      res.status(500).render("auth/signup", { errorMessage: error.message });
+    } else if (error.code === 11000) {
+      res.status(500).render("auth/signup", {
+        errorMessage: "Email needs to be unique. Provide a valid email.",
+      });
+    } else {
+      res.status(500).render("auth/signup", { errorMessage: "An error occurred. Please try again." });
+    }
+  }
 });
 
 // GET /auth/login
@@ -91,67 +95,45 @@ router.get("/login", isLoggedOut, (req, res) => {
 });
 
 // POST /auth/login
-router.post("/login", isLoggedOut, (req, res, next) => {
+router.post("/login", isLoggedOut, async (req, res, next) => {
   const { email, password } = req.body;
 
   // Check that email, and password are provided
   if (email === "" || password === "") {
-    res.status(400).render("auth/login", {
-      errorMessage:
-        "All fields are mandatory. Please provide email and password.",
-    });
-
-    return;
-  }
-
-  // Here we use the same logic as above
-  // - either length based parameters or we check the strength of a password
-  if (password.length < 6) {
     return res.status(400).render("auth/login", {
-      errorMessage: "Your password needs to be at least 6 characters long.",
+      errorMessage: "All fields are mandatory. Please provide email and password.",
     });
   }
 
-  // Search the database for a user with the email submitted in the form
-  User.findOne({ email })
-    .then((user) => {
-      // If the user isn't found, send an error message that user provided wrong credentials
-      if (!user) {
-        res
-          .status(400)
-          .render("auth/login", { errorMessage: "Wrong credentials." });
-        return;
-      }
+  try {
+    const user = await User.findOne({ email }).populate("cart").populate("address");
 
-      // If user is found based on the check if the in putted password matches the one saved in the database
-      bcrypt
-        .compare(password, user.password)
-        .then((isSamePassword) => {
-          if (!isSamePassword) {
-            res
-              .status(400)
-              .render("auth/login", { errorMessage: "Wrong credentials." });
-            return;
-          }
+    // If the user isn't found, send an error message
+    if (!user) {
+      return res.status(400).render("auth/login", { errorMessage: "Wrong credentials." });
+    }
 
-          // Add the user object to the session object
-          req.session.currentUser = user.toObject();
-          // Remove the password field
-          delete req.session.currentUser.password;
+    // Compare the provided password with the hashed password in the database
+    const isSamePassword = await bcrypt.compare(password, user.password);
+    if (!isSamePassword) {
+      return res.status(400).render("auth/login", { errorMessage: "Wrong credentials." });
+    }
 
-          res.redirect("/");
-        })
-        .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
-    })
-    .catch((err) => next(err));
+    // Add the user object to the session object
+    req.session.currentUserId = user._id;
+    req.session.isSignedUp = user.isSignedUp;
+
+    res.redirect("/");
+  } catch (err) {
+    next(err);
+  }
 });
 
 // GET /auth/logout
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      res.status(500).render("auth/logout", { errorMessage: err.message });
-      return;
+      return res.status(500).render("auth/logout", { errorMessage: err.message });
     }
 
     res.redirect("/");

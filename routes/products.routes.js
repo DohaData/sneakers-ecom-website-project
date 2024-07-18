@@ -27,10 +27,10 @@ router.get("/filter", async (req, res, next) => {
 });
 
 /* GET products page */
-  router.get("/:id", async (req, res, next) => {
-    const productId = req.params.id;
-    const product = await Product.findById(`${productId}`);
-    res.render("products/product-details", { product });
-  });
+router.get("/:id", async (req, res, next) => {
+  const productId = req.params.id;
+  const product = await Product.findById(`${productId}`);
+  res.render("products/product-details", { product });
+});
 
 module.exports = router;
