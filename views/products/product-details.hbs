@@ -5,8 +5,11 @@
     <div class="product-info">
         <h1>{{product.name}}</h1>
         <p>Price: ${{product.price}}</p>
-        <p>Quantity: <input type="number" name="quantity" value="1"></p>
-        <button>Add to Cart</button>
+        <p class="product-brand">Brand: {{product.brand}}</p>
+        <p class="product-model">Model: {{product.model}}</p>
+        <p class="product-color">Color: {{product.color}}</p>
         <p class="product-description">Description: {{product.description}}</p>
+        <p>Quantity: <input type="number" name="quantity" value="1"></p>
+        <button class="btn btn-primary">Add to Cart</button>
     </div>
 </div>
