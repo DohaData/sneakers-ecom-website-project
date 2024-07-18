@@ -1,0 +1,79 @@
+<div class="container cart-page">
+  <div class="cart-products">
+    {{#each cartItems}}
+      <div class="cart-item">
+        <img src="{{imageUrl}}" alt="{{name}}" />
+        <div class="cart-item-details">
+          <h5>{{name}}</h5>
+          <p>Price: ${{price}}</p>
+          <p>Quantity: {{quantity}}</p>
+        </div>
+        <div class="cart-item-actions">
+          <a
+            href="/cart/decrease-product-quantity/{{_id}}"
+            class="btn btn-primary"
+          >-</a>
+          <a
+            href="/cart/increase-product-quantity/{{_id}}"
+            class="btn btn-primary"
+            
+          >+</a>
+          <a
+            href="/cart/remove-product/{{_id}}"
+            class="btn btn-primary"
+          >Remove</a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+  <div class="cart-summary">
+    <h3 class="summary-title">Summary</h3>
+    <div class="summary-item">
+      <p>Total Price: ${{totalPrice}}</p>
+      <p>Estimated Shipping Date: {{estimatedShippingDate}}</p>
+    </div>
+    <div class="address-section">
+      <h5>Address</h5>
+      <div class="form-group">
+        <label for="houseNumber" class="form-label">House Number</label>
+        <input type="text" class="form-control" id="houseNumber" required />
+      </div>
+      <div class="form-group">
+        <label for="street" class="form-label">Street</label>
+        <input type="text" class="form-control" id="street" required />
+      </div>
+      <div class="form-group">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" id="city" required />
+      </div>
+      <div class="form-group">
+        <label for="state" class="form-label">State</label>
+        <input type="text" class="form-control" id="state" required />
+      </div>
+      <div class="form-group">
+        <label for="country" class="form-label">Country</label>
+        <input type="text" class="form-control" id="country" required />
+      </div>
+      <div class="form-group">
+        <label for="zip" class="form-label">Zip</label>
+        <input type="text" class="form-control" id="zip" required />
+      </div>
+      <div class="form-group">
+        <label for="additionalInfo" class="form-label">Additional Info</label>
+        <input type="text" class="form-control" id="additionalInfo" />
+      </div>
+    </div>
+    <div class="payment-section">
+      <h5>Payment</h5>
+      <form id="payment-form">
+        <div id="card-element">
+          <!-- A Stripe Element will be inserted here. -->
+        </div>
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+        <button id="submit-button">Submit Payment</button>
+      </form>
+    </div>
+    <a class="btn-primary order-button" href="/cart/checkout">Order</a>
+  </div>
+</div>
