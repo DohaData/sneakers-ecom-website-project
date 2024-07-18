@@ -713,3 +713,30 @@ section.range-slider input[type="range"]::-moz-range-track {
   justify-content: space-between;
   align-items: center;
 }
+
+
+/* About Us */
+.about-us {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 20px auto; /* Center horizontally */
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center children */
+  text-align: center; /* Center text */
+}
+
+#aboutkids {
+  max-width: 400px; /* Adjust based on your image size */
+  height: auto;
+  margin-left: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+
