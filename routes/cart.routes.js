@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const User = require("../models/User.model");
 const Cart = require("../models/Cart.model");
-const Product = require("../models/Product.model");
+const Address = require("../models/Address.model");
 
 router.get("/", async (req, res, next) => {
   if (!req.session.currentUserId) {
@@ -30,21 +30,27 @@ router.get("/", async (req, res, next) => {
         model: "Product",
       },
     })
+    .populate("address")
     .exec();
   const cart = currentUser.cart;
 
+  let estimatedShippingDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+
+  // Set the time to midnight (00:00:00)
+  estimatedShippingDate.setHours(0, 0, 0, 0);
+
   res.render("cart-related/cart", {
     cartItems: cart.products.map((productInfo) => {
-        productInfo.product.quantity = productInfo.quantity;
-        return productInfo.product;
-    }
-    ),
+      productInfo.product.quantity = productInfo.quantity;
+      return productInfo.product;
+    }),
     totalPrice: cart.products.reduce(
       (total, productInfo) =>
         total + productInfo.quantity * productInfo.product.price,
       0
     ),
-    estimatedShippingDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    estimatedShippingDate: estimatedShippingDate.toISOString().split("T")[0],
+    address: currentUser.address,
   });
 });
 
@@ -178,7 +184,9 @@ router.get("/increase-product-quantity/:productId", async (req, res, next) => {
   res.redirect("/cart");
 });
 
-router.get("/checkout", async (req, res, next) => {
+router.post("/checkout", async (req, res, next) => {
+  const { houseNumber, street, city, state, zip, country, additionalInfo } =
+    req.body;
   const currentUser = await User.findById(req.session.currentUserId)
     .populate({
       path: "cart",
@@ -188,10 +196,21 @@ router.get("/checkout", async (req, res, next) => {
       },
     })
     .exec();
+
+  const address = await Address.create({
+    houseNumber,
+    street,
+    city,
+    state,
+    zip,
+    country,
+    additionalInfo,
+  });
+  currentUser.address = address._id;
+  await currentUser.save();
+
   const cart = currentUser.cart;
-
   cart.products = [];
-
   await cart.save();
 
   res.render("cart-related/cart-checkout");

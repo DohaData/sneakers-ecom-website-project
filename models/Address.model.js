@@ -18,12 +18,12 @@ const addressSchema = new Schema(
             type: String,
             required: true,
         },
-        country: {
-            type: String,
-            required: true,
-        },
         zip: {
             type: Number,
+            required: true,
+        },
+        country: {
+            type: String,
             required: true,
         },
         additionalInfo: {
