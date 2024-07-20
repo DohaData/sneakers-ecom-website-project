@@ -48,11 +48,11 @@ router.post("/signup", isLoggedOut, async (req, res) => {
   }
 
   // Password validation
-  const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+  const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
   if (!passwordPattern.test(password)) {
     return res.status(400).render("auth/signup", {
       errorMessage:
-        "Password must be at least 8 characters long and contain a mix of letters, numbers, and special characters.",
+        "Password must be at least 6 characters long and contain a mix of letters, numbers, and special characters.",
       isSignedOut,
     });
   }
