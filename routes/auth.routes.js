@@ -61,18 +61,17 @@ router.post("/signup", isLoggedOut, async (req, res) => {
     // Create a new cart for the user
     const cart = await Cart.create({
       products: [],
-      totalAmount: 0
     });
 
     // Hash the password and create the user
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const user = await User.create({
+    await User.create({
       email,
       password: hashedPassword,
       isSignedUp: true,
-      cart: cart._id  // Associate the cart with the user
+      cart: cart._id, // Associate the cart with the user
     });
 
     res.redirect("/auth/login");
@@ -84,7 +83,9 @@ router.post("/signup", isLoggedOut, async (req, res) => {
         errorMessage: "Email needs to be unique. Provide a valid email.",
       });
     } else {
-      res.status(500).render("auth/signup", { errorMessage: "An error occurred. Please try again." });
+      res.status(500).render("auth/signup", {
+        errorMessage: "An error occurred. Please try again.",
+      });
     }
   }
 });
@@ -101,22 +102,35 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
   // Check that email, and password are provided
   if (email === "" || password === "") {
     return res.status(400).render("auth/login", {
-      errorMessage: "All fields are mandatory. Please provide email and password.",
+      errorMessage:
+        "All fields are mandatory. Please provide email and password.",
     });
   }
 
   try {
-    const user = await User.findOne({ email }).populate("cart").populate("address");
+    
+    const user = await User.findOne({ email });
 
     // If the user isn't found, send an error message
     if (!user) {
-      return res.status(400).render("auth/login", { errorMessage: "Wrong credentials." });
+      return res
+        .status(400)
+        .render("auth/login", { errorMessage: "Wrong credentials." });
     }
 
     // Compare the provided password with the hashed password in the database
     const isSamePassword = await bcrypt.compare(password, user.password);
     if (!isSamePassword) {
-      return res.status(400).render("auth/login", { errorMessage: "Wrong credentials." });
+      return res
+        .status(400)
+        .render("auth/login", { errorMessage: "Wrong credentials." });
+    }
+
+    if (req.session.currentUserId) {
+      const unsignedUser = await User.findById(req.session.currentUserId);
+      user.cart = unsignedUser.cart;
+      await user.save();
+      await User.findByIdAndDelete(req.session.currentUserId);
     }
 
     // Add the user object to the session object
@@ -133,7 +147,9 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
 router.get("/logout", isLoggedIn, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).render("auth/logout", { errorMessage: err.message });
+      return res
+        .status(500)
+        .render("auth/logout", { errorMessage: err.message });
     }
 
     res.redirect("/");
