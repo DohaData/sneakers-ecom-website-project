@@ -1,14 +1,22 @@
 const express = require("express");
-const router = express.Router();
+const { updateSignInStatus } = require("../utils");
 const { getProductSummary } = require("../utils");
-
 const Product = require("../models/Product.model");
+const router = express.Router();
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
   const products = await Product.find();
   const { minPrice, maxPrice, brands } = getProductSummary(products);
-  res.render("products/all-products", { products, minPrice, maxPrice, brands });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("products/all-products", {
+    products,
+    minPrice,
+    maxPrice,
+    brands,
+    isSignedOut,
+    firstName,
+  });
 });
 
 /* GET filtered products */
@@ -23,14 +31,23 @@ router.get("/filter", async (req, res, next) => {
   const products = await Product.find(filters);
   const allProducts = await Product.find();
   const { minPrice, maxPrice, brands } = getProductSummary(allProducts);
-  res.render("products/all-products", { products, minPrice, maxPrice, brands });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("products/all-products", {
+    products,
+    minPrice,
+    maxPrice,
+    brand,
+    isSignedOut,
+    firstName,
+  });
 });
 
 /* GET products page */
 router.get("/:id", async (req, res, next) => {
   const productId = req.params.id;
   const product = await Product.findById(`${productId}`);
-  res.render("products/product-details", { product });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("products/product-details", { product, isSignedOut, firstName });
 });
 
 module.exports = router;

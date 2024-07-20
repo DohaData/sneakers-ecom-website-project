@@ -32,6 +32,40 @@
       <p>Estimated Shipping Date: {{estimatedShippingDate}}</p>
     </div>
     <form action="/cart/checkout" method="POST">
+      {{#if isSignedOut}}
+        <div class="personal-info-section">
+          <h5>Personal Information</h5>
+          <div class="form-group">
+            <label for="firstName" class="form-label">First name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              name="firstName"
+              value="{{personalInfo.firstName}}"
+              required
+            />
+            <label for="LastName" class="form-label">Last name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="LastName"
+              name="LastName"
+              value="{{personalInfo.LastName}}"
+              required
+            />
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              name="email"
+              value="{{personalInfo.email}}"
+              required
+            />
+          </div>
+        </div>
+      {{/if}}
       <div class="address-section">
         <h5>Address</h5>
         <div class="form-group">

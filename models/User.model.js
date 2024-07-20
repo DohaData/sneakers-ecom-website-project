@@ -13,6 +13,12 @@ const userSchema = new Schema(
     password: {
       type: String,
     },
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
     cart: {
       type: Schema.Types.ObjectId,
       ref: "Cart",
