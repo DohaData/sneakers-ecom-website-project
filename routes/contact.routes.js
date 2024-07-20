@@ -1,11 +1,13 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
+const { updateSignInStatus } = require('../utils');
 const router = express.Router();
 
 
 // GET route for the contact page
-router.get('/', (req, res) => {
-    res.render('contact/contact');
+router.get('/', async (req, res) => {
+    const [isSignedOut, firstName] = await updateSignInStatus(req);
+    res.render('contact/contact', { isSignedOut, firstName });
 });
 
 // Send Email
@@ -44,14 +46,14 @@ router.post('/', (req, res) => {
     };
 
     // Send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, async (error, info) => {
         if (error) {
             return console.log(error);
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-        res.render('contact/contact', { msg: 'Email has been sent' });
+        const [isSignedOut, firstName] = await updateSignInStatus(req);
+        res.render('contact/contact', { msg: 'Email has been sent' , isSignedOut, firstName});
     });
 });
 
