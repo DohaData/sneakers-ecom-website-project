@@ -8,13 +8,14 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   const products = await Product.find();
   const { minPrice, maxPrice, brands } = getProductSummary(products);
-  const isSignedOut = await updateSignInStatus(req);
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
   res.render("products/all-products", {
     products,
     minPrice,
     maxPrice,
     brands,
     isSignedOut,
+    firstName,
   });
 });
 
@@ -30,13 +31,14 @@ router.get("/filter", async (req, res, next) => {
   const products = await Product.find(filters);
   const allProducts = await Product.find();
   const { minPrice, maxPrice, brands } = getProductSummary(allProducts);
-  const isSignedOut = await updateSignInStatus(req);
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
   res.render("products/all-products", {
     products,
     minPrice,
     maxPrice,
     brand,
     isSignedOut,
+    firstName,
   });
 });
 
@@ -44,8 +46,8 @@ router.get("/filter", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   const productId = req.params.id;
   const product = await Product.findById(`${productId}`);
-  const isSignedOut = await updateSignInStatus(req);
-  res.render("products/product-details", { product, isSignedOut });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("products/product-details", { product, isSignedOut, firstName });
 });
 
 module.exports = router;

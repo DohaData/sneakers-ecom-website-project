@@ -1,12 +1,13 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
+const { updateSignInStatus } = require('../utils');
 const router = express.Router();
 
 
 // GET route for the contact page
 router.get('/', async (req, res) => {
-    const isSignedOut = await updateSignInStatus(req);
-    res.render('contact/contact', { isSignedOut });
+    const [isSignedOut, firstName] = await updateSignInStatus(req);
+    res.render('contact/contact', { isSignedOut, firstName });
 });
 
 // Send Email
@@ -51,8 +52,8 @@ router.post('/', (req, res) => {
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        const isSignedOut = await updateSignInStatus(req);
-        res.render('contact/contact', { msg: 'Email has been sent' , isSignedOut});
+        const [isSignedOut, firstName] = await updateSignInStatus(req);
+        res.render('contact/contact', { msg: 'Email has been sent' , isSignedOut, firstName});
     });
 });
 

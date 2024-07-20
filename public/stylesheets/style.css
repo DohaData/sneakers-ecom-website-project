@@ -122,6 +122,11 @@ header {
   font-size: 20px;
 }
 
+.bi-person {
+  color: #336699;
+  font-size: 20px;
+}
+
 .navbar-collapse {
   justify-content: flex-end;
 }
@@ -757,6 +762,11 @@ section.range-slider input[type="range"]::-moz-range-track {
 
 .cart-summary p {
   margin: 10px 0;
+  font-size: 14px;
+}
+
+.personal-info-section .form-group {
+  margin-bottom: 15px;
   font-size: 14px;
 }
 

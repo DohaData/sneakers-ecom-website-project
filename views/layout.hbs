@@ -54,23 +54,29 @@
                   <a class="nav-link" href="/contact">Contact</a>
                 </li>
                 {{#if isSignedOut}}
-                <li class="nav-item">
-                  <a class="nav-link" href="/auth/signup">Signup</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/auth/login">Login</a>
-                </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/auth/signup">Signup</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/auth/login">Login</a>
+                  </li>
                 {{else}}
-                <li class="nav-item">
-                  <a class="nav-link" href="/auth/logout">Logout</a>
-                </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/auth/logout">Logout</a>
+                  </li>
                 {{/if}}
                 <li class="nav-item">
                   <a class="nav-link" href="/cart">
                     <i class="fas fa-shopping-cart"></i>
                   </a>
                 </li>
-
+                {{#if firstName}}
+                  <li>
+                    <a class="nav-link" href="/">Hello <strong>{{firstName}}</strong></a>
+                      <i class="bi bi-person"></i>
+                    </a>
+                  </li>
+                {{/if}}
               </ul>
             </div>
           </div>

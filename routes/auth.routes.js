@@ -20,15 +20,15 @@ const { updateSignInStatus } = require("../utils");
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, async (req, res) => {
-  const isSignedOut = await updateSignInStatus(req);
-  res.render("auth/signup", { isSignedOut });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("auth/signup", { firstName, isSignedOut });
 });
 
 // POST /auth/signup
 router.post("/signup", isLoggedOut, async (req, res) => {
-  const { email, password, confirmPassword } = req.body;
+  const { firstName, lastName, email, password, confirmPassword } = req.body;
 
-  const isSignedOut = await updateSignInStatus(req);
+  const [isSignedOut, _] = await updateSignInStatus(req);
   // Check that email, and password are provided
   if (email === "" || password === "") {
     return res.status(400).render("auth/signup", {
@@ -78,6 +78,8 @@ router.post("/signup", isLoggedOut, async (req, res) => {
     await User.create({
       email,
       password: hashedPassword,
+      firstName,
+      lastName,
       isSignedUp: true,
       cart: cart._id, // Associate the cart with the user
     });
@@ -87,7 +89,7 @@ router.post("/signup", isLoggedOut, async (req, res) => {
     if (error instanceof mongoose.Error.ValidationError) {
       res
         .status(500)
-        .render("auth/signup", { errorMessage: error.message, isSignedOut });
+        .render("auth/signup", { errorMessage: error.message, isSignedOut, firstName });
     } else if (error.code === 11000) {
       res.status(500).render("auth/signup", {
         errorMessage: "Email needs to be unique. Provide a valid email.",
@@ -104,14 +106,14 @@ router.post("/signup", isLoggedOut, async (req, res) => {
 
 // GET /auth/login
 router.get("/login", isLoggedOut, async (req, res) => {
-  const isSignedOut = await updateSignInStatus(req);
-  res.render("auth/login", { isSignedOut });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("auth/login", { isSignedOut, firstName });
 });
 
 // POST /auth/login
 router.post("/login", isLoggedOut, async (req, res, next) => {
   const { email, password } = req.body;
-  const isSignedOut = await updateSignInStatus(req);
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
 
   // Check that email, and password are provided
   if (email === "" || password === "") {
@@ -119,6 +121,7 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
       errorMessage:
         "All fields are mandatory. Please provide email and password.",
       isSignedOut,
+      firstName,
     });
   }
 
@@ -130,6 +133,7 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
       return res.status(400).render("auth/login", {
         errorMessage: "Wrong credentials.",
         isSignedOut,
+        firstName,
       });
     }
 
@@ -139,6 +143,7 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
       return res.status(400).render("auth/login", {
         errorMessage: "Wrong credentials.",
         isSignedOut,
+        firstName,
       });
     }
 
@@ -161,12 +166,12 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
 
 // GET /auth/logout
 router.get("/logout", isLoggedIn, async (req, res) => {
-  const isSignedOut = await updateSignInStatus(req);
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
   req.session.destroy((err) => {
     if (err) {
       return res
         .status(500)
-        .render("auth/logout", { errorMessage: err.message, isSignedOut });
+        .render("auth/logout", { errorMessage: err.message, isSignedOut, firstName });
     }
 
     res.redirect("/");

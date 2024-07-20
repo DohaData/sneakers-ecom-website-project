@@ -4,8 +4,8 @@ const router = express.Router();
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
-  const isSignedOut = await updateSignInStatus(req);
-  res.render("index", { isSignedOut });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("index", { isSignedOut, firstName });
 });
 
 module.exports = router;

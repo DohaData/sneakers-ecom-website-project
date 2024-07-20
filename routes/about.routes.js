@@ -4,8 +4,8 @@ const { updateSignInStatus } = require("../utils");
 
 /* GET About Us page */
 router.get("/", async (req, res) => {
-  const isSignedOut = await updateSignInStatus(req);
-  res.render("about-us/about", { isSignedOut });
+  const [isSignedOut, firstName] = await updateSignInStatus(req);
+  res.render("about-us/about", { firstName, isSignedOut });
 });
 
 module.exports = router;

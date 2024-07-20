@@ -3,8 +3,8 @@ const { updateSignInStatus } = require("../utils");
 module.exports = (app) => {
   app.use(async (req, res, next) => {
     // this middleware runs whenever requested page is not available
-    const isSignedOut = await updateSignInStatus(req);
-    res.status(404).render("not-found", {isSignedOut});
+    const [isSignedOut, firstName] = await updateSignInStatus(req);
+    res.status(404).render("not-found", {firstName, isSignedOut});
   });
 
   app.use(async (err, req, res, next) => {
@@ -14,8 +14,8 @@ module.exports = (app) => {
 
     // only render if the error ocurred before sending the response
     if (!res.headersSent) {
-      const isSignedOut = await updateSignInStatus(req);
-      res.status(500).render("error", {isSignedOut});
+      const [isSignedOut, firstName] = await updateSignInStatus(req);
+      res.status(500).render("error", {firstName, isSignedOut});
     }
   });
 };

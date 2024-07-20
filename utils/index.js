@@ -9,9 +9,9 @@ function getProductSummary(products) {
 async function updateSignInStatus(req) {
   if (req.session.currentUserId) {
       const user = await User.findById(req.session.currentUserId);
-      return !user.isSignedUp;
+      return [!user.isSignedUp, user.firstName];
   }
-  return true;
+  return [true, undefined];
 }
 
 module.exports = { getProductSummary, updateSignInStatus };
