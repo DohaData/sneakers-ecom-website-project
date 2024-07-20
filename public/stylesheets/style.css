@@ -755,6 +755,16 @@ section.range-slider input[type="range"]::-moz-range-track {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.cart-summary p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.address-section .form-group {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
 .cart-item {
   display: flex;
   justify-content: space-between;
@@ -809,6 +819,18 @@ section.range-slider input[type="range"]::-moz-range-track {
 
 .cart-item button:hover {
   background-color: #0056b3;
+}
+
+#card-element {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+#card-error {
+  color: #e57373;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 /* checkout page */

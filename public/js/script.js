@@ -35,43 +35,43 @@ window.onload = function () {
   }
 
   // stripe payment
-  const stripe = Stripe(
-    "pk_test_oKhSR5nslBRnBZpjO6KuzZeX"
-  );
+  const stripe = Stripe("pk_test_oKhSR5nslBRnBZpjO6KuzZeX");
   const elements = stripe.elements();
 
   // Create an instance of the card Element
   const card = elements.create("card");
 
   // Add an instance of the card Element into the `card-element` div
-  card.mount("#card-element");
+  if (document.getElementById("card-element")) {
+    card.mount("#card-element");
 
-  // Handle real-time validation errors from the card Element
-  card.on("change", function (event) {
-    const displayError = document.getElementById("card-errors");
-    if (event.error) {
-      displayError.textContent = event.error.message;
-    } else {
-      displayError.textContent = "";
-    }
-  });
-
-  // Handle form submission
-  const form = document.getElementById("payment-form");
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    stripe.createToken(card).then(function (result) {
-      if (result.error) {
-        // Inform the customer that there was an error
-        const errorElement = document.getElementById("card-errors");
-        errorElement.textContent = result.error.message;
+    // Handle real-time validation errors from the card Element
+    card.on("change", function (event) {
+      const displayError = document.getElementById("card-errors");
+      if (event.error) {
+        displayError.textContent = event.error.message;
       } else {
-        // Send the token to your server
-        stripeTokenHandler(result.token);
+        displayError.textContent = "";
       }
     });
-  });
+  }
+
+  // Handle form submission
+  // const form = document.getElementById("payment-form");
+  // form.addEventListener("submit", function (event) {
+  //   event.preventDefault();
+
+  //   stripe.createToken(card).then(function (result) {
+  //     if (result.error) {
+  //       // Inform the customer that there was an error
+  //       const errorElement = document.getElementById("card-errors");
+  //       errorElement.textContent = result.error.message;
+  //     } else {
+  //       // Send the token to your server
+  //       stripeTokenHandler(result.token);
+  //     }
+  //   });
+  // });
 
   // Submit the token to your server
   function stripeTokenHandler(token) {
