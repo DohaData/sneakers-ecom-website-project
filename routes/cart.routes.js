@@ -228,11 +228,6 @@ router.post("/checkout", async (req, res, next) => {
   });
   currentUser.address = address._id;
 
-  if (!currentUser.isSignedUp) {
-    currentUser.firstName = firstName;
-    currentUser.lastName = lastName;
-    currentUser.email = email;
-  }
   await currentUser.save();
 
   await Order.create({
