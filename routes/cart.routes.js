@@ -6,6 +6,8 @@ const User = require("../models/User.model");
 const Cart = require("../models/Cart.model");
 const Address = require("../models/Address.model");
 
+const { updateSignInStatus } = require("../utils");
+
 router.get("/", async (req, res, next) => {
   if (!req.session.currentUserId) {
     const cart = await Cart.create({
@@ -38,7 +40,7 @@ router.get("/", async (req, res, next) => {
 
   // Set the time to midnight (00:00:00)
   estimatedShippingDate.setHours(0, 0, 0, 0);
-
+  const isSignedOut = await updateSignInStatus(req);
   res.render("cart-related/cart", {
     cartItems: cart.products.map((productInfo) => {
       productInfo.product.quantity = productInfo.quantity;
@@ -51,6 +53,7 @@ router.get("/", async (req, res, next) => {
     ),
     estimatedShippingDate: estimatedShippingDate.toISOString().split("T")[0],
     address: currentUser.address,
+    isSignedOut,
   });
 });
 
@@ -212,8 +215,8 @@ router.post("/checkout", async (req, res, next) => {
   const cart = currentUser.cart;
   cart.products = [];
   await cart.save();
-
-  res.render("cart-related/cart-checkout");
+  const isSignedOut = await updateSignInStatus(req);
+  res.render("cart-related/cart-checkout", { isSignedOut});
 });
 
 module.exports = router;
