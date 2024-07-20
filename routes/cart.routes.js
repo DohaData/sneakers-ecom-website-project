@@ -33,6 +33,11 @@ router.get("/", async (req, res, next) => {
     .exec();
   const cart = currentUser.cart;
 
+  let estimatedShippingDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+
+  // Set the time to midnight (00:00:00)
+  estimatedShippingDate.setHours(0, 0, 0, 0);
+
   res.render("cart-related/cart", {
     cartItems: cart.products.map((productInfo) => {
         productInfo.product.quantity = productInfo.quantity;
@@ -44,7 +49,7 @@ router.get("/", async (req, res, next) => {
         total + productInfo.quantity * productInfo.product.price,
       0
     ),
-    estimatedShippingDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    estimatedShippingDate: estimatedShippingDate.toISOString().split('T')[0],
   });
 });
 
