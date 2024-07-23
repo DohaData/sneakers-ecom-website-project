@@ -12,6 +12,14 @@
         
         <!-- Form for adding product to cart -->
         <form action="/cart/add-product/{{product._id}}" method="GET">
+            <p>
+                <label for="size">Size:</label>
+                <select name="size" id="size">
+                    {{#each product.availableSizes}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </p>
             <p>Quantity: <input type="number" name="quantity" value="1" min="1"></p>
             <button type="submit" class="btn btn-primary">Add to Cart</button>
         </form>

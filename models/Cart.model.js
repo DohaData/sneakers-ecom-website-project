@@ -14,6 +14,10 @@ const cartSchema = new Schema(
                     required: true,
                     default: 1,
                 },
+                selectedSize: {
+                    type: Number,
+                    required: true,
+                },
             },
         ],
     },
