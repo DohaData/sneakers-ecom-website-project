@@ -3,9 +3,12 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product.model");
 const User = require("../models/User.model");
 
+const MONGO_URI =
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sneakers-ecom-website-project";
+
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/sneakers-ecom-website-project", {
+  .connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
