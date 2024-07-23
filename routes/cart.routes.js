@@ -67,6 +67,7 @@ router.get("/", async (req, res, next) => {
 router.get("/add-product/:productId", async (req, res, next) => {
   const productId = req.params.productId;
   const quantity = Number(req.query.quantity | 1);
+  const selectedSize = req.query.size;
 
   if (!req.session.currentUserId) {
     const cart = await Cart.create({
