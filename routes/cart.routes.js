@@ -45,6 +45,7 @@ router.get("/", async (req, res, next) => {
   res.render("cart-related/cart", {
     cartItems: cart.products.map((productInfo) => {
       productInfo.product.quantity = productInfo.quantity;
+      productInfo.product.selectedSize = productInfo.selectedSize;
       return productInfo.product;
     }),
     totalPrice: cart.products.reduce(
@@ -67,6 +68,7 @@ router.get("/", async (req, res, next) => {
 router.get("/add-product/:productId", async (req, res, next) => {
   const productId = req.params.productId;
   const quantity = Number(req.query.quantity | 1);
+  const selectedSize = req.query.size;
 
   if (!req.session.currentUserId) {
     const cart = await Cart.create({
@@ -101,7 +103,7 @@ router.get("/add-product/:productId", async (req, res, next) => {
   if (productIndex > -1) {
     cart.products[productIndex].quantity += quantity;
   } else {
-    cart.products.push({ product: productId, quantity: quantity });
+    cart.products.push({ product: productId, quantity, selectedSize });
   }
 
   await cart.save();
@@ -153,9 +155,10 @@ router.get("/decrease-product-quantity/:productId", async (req, res, next) => {
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity -= 1;
+    console.log(cart.products[productIndex].quantity);
     if (cart.products[productIndex].quantity === 0) {
       cart.products = cart.products.filter(
-        (product) => product.product.toString() !== productId
+        (product) => product.product._id.toString() !== productId
       );
     }
   }
@@ -185,8 +188,6 @@ router.get("/increase-product-quantity/:productId", async (req, res, next) => {
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity += 1;
-  } else {
-    cart.products.push({ product: productId, quantity: 1 });
   }
 
   await cart.save();
@@ -232,7 +233,7 @@ router.post("/checkout", async (req, res, next) => {
 
   await Order.create({
     user: currentUser._id,
-    cart : currentUser.cart._id,
+    cart: currentUser.cart._id,
     status: "SUBMITTED",
     shippingAddress: address._id,
     estimatedDelivery: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
