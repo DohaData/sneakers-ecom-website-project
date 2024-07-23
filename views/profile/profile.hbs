@@ -1,0 +1,32 @@
+<body id="profile">
+  <header id="welcomeUser">
+    <h1>Welcome, {{firstName}}!</h1>
+  </header>
+
+  <main>
+    <h2>Your Orders</h2>
+
+    {{#if orders.length}}
+      {{#each orders}}
+        <div class="order-box">
+          <h3>Order ID: {{this._id}}</h3>
+          <p><strong>Status:</strong> {{this.status}}</p>
+          <ul>
+            {{#each this.cart.items}}
+              <li>
+                <p><strong>Product:</strong> {{this.product.name}}</p>
+                <p><strong>Quantity:</strong> {{this.quantity}}</p>
+                <p><strong>Price:</strong> ${{this.product.price}}</p>
+              </li>
+            {{/each}}
+          </ul>
+          <p><strong>Total Price:</strong> ${{totalPrice}}</p>
+          <p><strong>Shipping Address:</strong> {{this.shippingAddress.street}}, {{this.shippingAddress.city}}, {{this.shippingAddress.zipCode}}, {{this.shippingAddress.country}}</p>
+          <p><strong>Submitted On:</strong> {{ this.createdAt }}</p>
+        </div>
+      {{/each}}
+    {{else}}
+      <p>You have no previous orders.</p>
+    {{/if}}
+  </main>
+</body>
