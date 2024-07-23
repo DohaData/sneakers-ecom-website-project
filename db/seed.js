@@ -35,6 +35,7 @@ async function seedData() {
         isAdmin: false,
       },
       {
+        email: "guest@example.com",
         isSignedUp: false,
       },
       // Add more users here
