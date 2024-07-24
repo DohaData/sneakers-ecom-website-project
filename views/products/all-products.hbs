@@ -42,13 +42,17 @@
             </section>
           </div>
           <div class="form-group">
-            <label for="brand">Brand:</label>
-            <select class="form-control" id="brand" name="brand">
-              <option value="">All Brands</option>
+            <label>Brand:</label>
+            <div class="checkbox-group">
               {{#each brands}}
-                <option value="{{this}}">{{this}}</option>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="brand" id="brand-{{@index}}" value="{{this}}">
+                  <label class="form-check-label" for="brand-{{@index}}">
+                    {{this}}
+                  </label>
+                </div>
               {{/each}}
-            </select>
+            </div>
           </div>
           <div class="filter-buttons">
             <button type="submit" class="btn btn-primary">Apply Filters</button>
@@ -61,24 +65,33 @@
   <!-- Products Grid -->
   <div class="row">
     {{#if products}}
-    {{#each products}}
-      <div class="col-md-4 product-card flex-column">
-        <div class="card">
-          <a href="/products/{{_id}}">
-            <img src="{{imageUrl}}" class="card-img-top" alt="{{name}}" />
-            <div class="card-body">
-              <h5 class="card-title">{{name}}</h5>
-              <p class="card-text">{{description}}</p>
-              <p class="card-text">Price: ${{price}}</p>
-              <p class="card-text">Model: {{model}}</p>
-              <p class="card-text">Brand: {{brand}}</p>
-            </div>
-          </a>
-          <a href="/cart/add-product/{{_id}}" class="btn btn-primary">Buy
-            Now</a>
+      {{#each products}}
+        <div class="col-md-4 product-card flex-column">
+          <div class="card">
+            <a href="/products/{{_id}}">
+              <img src="{{imageUrl}}" class="card-img-top" alt="{{name}}" />
+              <div class="card-body">
+                <h5 class="card-title">{{name}}</h5>
+                <p class="card-text">{{description}}</p>
+                <p class="card-text">Price: ${{price}}</p>
+                <p class="card-text">Model: {{model}}</p>
+                <p class="card-text">Brand: {{brand}}</p>
+              </div>
+            </a>
+            <form action="/cart/add-product/{{_id}}" method="GET" class="p-3">
+              <div class="form-group">
+                <label for="size-{{_id}}">Size:</label>
+                <select class="form-control" id="size-{{_id}}" name="size">
+                  {{#each availableSizes}}
+                    <option value="{{this}}">{{this}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary mt-2">Buy Now</button>
+            </form>
+          </div>
         </div>
-      </div>
-    {{/each}}
+      {{/each}}
     {{else}}
       <p>No products matching the selection found</p>
     {{/if}}
