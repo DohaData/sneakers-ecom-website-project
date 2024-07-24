@@ -969,22 +969,17 @@ section.range-slider input[type="range"]::-moz-range-track {
   border: none;
   border-radius: 4px;
   padding: 8px 12px;
-};
-
-/* Profile Page Styles */
-#profile {
-  padding: 20px;
-  background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
-header#welcomeUser {
+/* Profile Page Styles */
+.profile-page {
+  padding: 20px;
+  background-color: #f9f9f9;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+#welcome-user {
   margin-top: 30px;
   background-color: #fff;
   padding: 20px;
@@ -992,30 +987,18 @@ header#welcomeUser {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   width: 100%;
-  max-width: 800px;
- 
 }
-
-header#welcomeUser h1 {
+#welcome-user h1 {
   font-size: 36px;
   font-weight: 700;
   color: #336699;
 }
-
-main {
+#orders-recap {
   width: 100%;
-  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-main h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
 .order-box {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -1025,49 +1008,40 @@ main h2 {
   margin-bottom: 20px;
   width: 100%;
 }
-
 .order-box h3 {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 10px;
 }
-
 .order-box p {
   font-size: 14px;
   color: #666;
   margin-bottom: 5px;
 }
-
 .order-box ul {
   list-style-type: none;
   padding: 0;
   margin: 10px 0;
 }
-
 .order-box ul li {
   background-color: #f5f5f5;
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 10px;
 }
-
 .order-box ul li p {
   margin: 5px 0;
 }
-
 .order-box ul li p strong {
   font-weight: 700;
 }
-
 @media (max-width: 768px) {
-  header#welcomeUser h1 {
+  #welcome-user h1 {
     font-size: 28px;
   }
-
-  main h2 {
+  #orders-recap h2 {
     font-size: 20px;
   }
-
   .order-box h3 {
     font-size: 18px;
   }

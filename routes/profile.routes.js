@@ -13,9 +13,26 @@ router.get("/:userId", async (req, res) => {
     const userId = req.params.userId;
     // Fetch orders for the signed-in user
     const orders = await Order.find({ user: userId })
-      .populate("cart shippingAddress")
+      .populate({
+        path: "cart",
+        populate: {
+          path: "products.product",
+          model: "Product",
+        },
+      })
+      .populate("shippingAddress")
       .exec();
-    res.render("profile/profile", { firstName, isSignedOut, orders });
+    orders.forEach((order) => {
+      order.totalPrice = order.cart.products.reduce((subTotal, productItem) => {
+        return subTotal + productItem.quantity * productItem.product.price;
+      }, 0);
+    });
+
+    res.render("profile/profile", {
+      firstName,
+      isSignedOut,
+      orders,
+    });
   } catch (error) {
     console.error("Error fetching profile data:", error);
     res.status(500).send("Internal Server Error");
