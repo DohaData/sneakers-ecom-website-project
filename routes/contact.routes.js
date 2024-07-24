@@ -6,8 +6,8 @@ const router = express.Router();
 
 // GET route for the contact page
 router.get('/', async (req, res) => {
-    const [isSignedOut, firstName] = await updateSignInStatus(req);
-    res.render('contact/contact', { isSignedOut, firstName });
+    const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+    res.render('contact/contact', { isSignedOut, firstName, userId });
 });
 
 // Send Email
@@ -52,8 +52,8 @@ router.post('/', (req, res) => {
         }
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        const [isSignedOut, firstName] = await updateSignInStatus(req);
-        res.render('contact/contact', { msg: 'Email has been sent' , isSignedOut, firstName});
+        const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+        res.render('contact/contact', { msg: 'Email has been sent' , isSignedOut, firstName, userId});
     });
 });
 
