@@ -16,14 +16,21 @@ const Cart = require("../models/Cart.model");
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 
-const { updateSignInStatus } = require("../utils");
+const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, async (req, res) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
-  res.render("auth/signup", { firstName, isSignedOut, userId, isAdmin });
+  let nbCartElements = await getNumberOfCartElements(req);
+  res.render("auth/signup", {
+    firstName,
+    isSignedOut,
+    userId,
+    isAdmin,
+    nbCartElements,
+  });
 });
 
 // POST /auth/signup
@@ -113,7 +120,8 @@ router.get("/login", isLoggedOut, async (req, res) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
-  res.render("auth/login", { isSignedOut, firstName, userId, isAdmin });
+  let nbCartElements = await getNumberOfCartElements(req);
+  res.render("auth/login", { isSignedOut, firstName, userId, isAdmin, nbCartElements });
 });
 
 // POST /auth/login

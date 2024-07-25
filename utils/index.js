@@ -8,10 +8,32 @@ function getProductSummary(products) {
 }
 async function updateSignInStatus(req) {
   if (req.session.currentUserId) {
-      const user = await User.findById(req.session.currentUserId);
-      return [!user.isSignedUp, user.firstName, user._id, user.isAdmin];
+    const user = await User.findById(req.session.currentUserId);
+    return [!user.isSignedUp, user.firstName, user._id, user.isAdmin];
   }
   return [true, undefined, undefined, undefined];
 }
 
-module.exports = { getProductSummary, updateSignInStatus };
+async function getNumberOfCartElements(req) {
+  let nbCartElements = 0;
+  if (req.session.currentUserId) {
+    const user = await User.findById(req.session.currentUserId).populate({
+      path: "cart",
+      populate: {
+        path: "products.product",
+        model: "Product",
+      },
+    });
+    nbCartElements = user.cart.products.reduce(
+      (total, productInfo) => total + productInfo.quantity,
+      0
+    );
+  }
+  return nbCartElements;
+}
+
+module.exports = {
+  getProductSummary,
+  updateSignInStatus,
+  getNumberOfCartElements,
+};
