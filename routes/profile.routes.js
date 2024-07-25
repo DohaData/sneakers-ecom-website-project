@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { updateSignInStatus } = require("../utils");
+const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
 const Order = require("../models/Order.model"); // Make sure the path is correct
 /* GET Profile page */
 router.get("/:userId", async (req, res) => {
@@ -10,7 +10,7 @@ router.get("/:userId", async (req, res) => {
       return res.redirect("/auth/login"); // Redirect to sign-in if not signed in
     }
     // Assuming req.user contains the authenticated user's details
-    const userId = req.params.userId;
+    const userId = req.params.currentUserId;
     // Fetch orders for the signed-in user
     const orders = await Order.find({ user: userId })
       .populate({
@@ -27,11 +27,12 @@ router.get("/:userId", async (req, res) => {
         return subTotal + productItem.quantity * productItem.product.price;
       }, 0);
     });
-
+    let nbCartElements = await getNumberOfCartElements(req);
     res.render("profile/profile", {
       firstName,
       isSignedOut,
       orders,
+      nbCartElements
     });
   } catch (error) {
     console.error("Error fetching profile data:", error);

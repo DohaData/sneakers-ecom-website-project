@@ -122,6 +122,14 @@ header {
   font-size: 20px;
 }
 
+.badge {
+  padding: 0.25em 0.4em;
+  border-radius: 0.75rem;
+  background-color: #336699;
+  color: white;
+  font-size: 12px;
+}
+
 .bi-person {
   color: #336699;
   font-size: 20px;

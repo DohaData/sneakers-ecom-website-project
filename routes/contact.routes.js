@@ -1,6 +1,6 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
-const { updateSignInStatus } = require("../utils");
+const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
 const router = express.Router();
 
 // GET route for the contact page
@@ -8,7 +8,8 @@ router.get("/", async (req, res) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
-  res.render("contact/contact", { isSignedOut, firstName, userId, isAdmin });
+  let nbCartElements = await getNumberOfCartElements(req);
+  res.render("contact/contact", { isSignedOut, firstName, userId, isAdmin, nbCartElements });
 });
 
 // Send Email
@@ -56,12 +57,14 @@ router.post("/", (req, res) => {
     const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
       req
     );
+    let nbCartElements = await getNumberOfCartElements(req);
     res.render("contact/contact", {
       msg: "Email has been sent",
       isSignedOut,
       firstName,
       userId,
       isAdmin,
+      nbCartElements,
     });
   });
 });

@@ -8,7 +8,7 @@ const Cart = require("../models/Cart.model");
 const Address = require("../models/Address.model");
 const Order = require("../models/Order.model");
 
-const { updateSignInStatus } = require("../utils");
+const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
 
 const router = express.Router();
 
@@ -56,6 +56,7 @@ router.get("/", async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("cart-related/cart", {
     cartItems,
     totalPrice: cart.products.reduce(
@@ -74,6 +75,7 @@ router.get("/", async (req, res, next) => {
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
@@ -355,11 +357,13 @@ router.post("/checkout", async (req, res, next) => {
 
   const [isSignedOut, firstNameInDb, userId, isAdmin] =
     await updateSignInStatus(req);
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("cart-related/cart-checkout", {
     isSignedOut,
     firstName: firstNameInDb,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 

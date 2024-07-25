@@ -1,5 +1,5 @@
 const express = require("express");
-const { updateSignInStatus, getProductSummary } = require("../utils");
+const { updateSignInStatus, getProductSummary, getNumberOfCartElements } = require("../utils");
 const isAdmin = require("../middleware/isAdmin");
 const Product = require("../models/Product.model");
 const router = express.Router();
@@ -11,6 +11,8 @@ router.get("/", async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
+  console.log(nbCartElements);
   res.render("products/all-products", {
     products,
     minPrice,
@@ -20,6 +22,7 @@ router.get("/", async (req, res, next) => {
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
@@ -48,6 +51,7 @@ router.get("/filter", async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("products/all-products", {
     products,
     minPrice,
@@ -57,6 +61,7 @@ router.get("/filter", async (req, res, next) => {
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
@@ -65,11 +70,13 @@ router.get("/add", isAdmin, async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("products/add-product", {
     isSignedOut,
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
@@ -114,6 +121,7 @@ router.get("/update/:id", isAdmin, async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("products/update-product", {
     product,
     availableSizesString,
@@ -121,6 +129,7 @@ router.get("/update/:id", isAdmin, async (req, res, next) => {
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
@@ -163,12 +172,14 @@ router.get("/:id", async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("products/product-details", {
     product,
     isSignedOut,
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
