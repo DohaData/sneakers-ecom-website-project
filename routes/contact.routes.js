@@ -32,8 +32,8 @@ router.post("/", (req, res) => {
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: "dohajoaquinironhack@gmail.com", // your email
-      pass: "hjrt aret ccqs jdua", // your email password
+      user: process.env.EMAIL_USER, // your email from environment variable
+      pass: process.env.EMAIL_PASS, // your email password from environment variable
     },
   });
 
