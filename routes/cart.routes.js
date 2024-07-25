@@ -8,7 +8,7 @@ const Cart = require("../models/Cart.model");
 const Address = require("../models/Address.model");
 const Order = require("../models/Order.model");
 
-const { updateSignInStatus } = require("../utils");
+const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
 
 const router = express.Router();
 
@@ -49,13 +49,12 @@ router.get("/", async (req, res, next) => {
     return product;
   });
 
-  console.log(cartItems.map((product) => product.quantity));
-
   // Set the time to midnight (00:00:00)
   estimatedShippingDate.setHours(0, 0, 0, 0);
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("cart-related/cart", {
     cartItems,
     totalPrice: cart.products.reduce(
@@ -74,6 +73,7 @@ router.get("/", async (req, res, next) => {
     firstName,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 
@@ -113,8 +113,6 @@ router.get("/add-product/:productId", async (req, res, next) => {
       productInfo.product._id.toString() === productId &&
       productInfo.selectedSize === selectedSize
   );
-
-  console.log(productIndex);
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity += quantity;
@@ -177,11 +175,9 @@ router.get("/decrease-product-quantity/:productId", async (req, res, next) => {
       productInfo.selectedSize === selectedSize
   );
 
-  console.log(productIndex);
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity -= 1;
-    console.log(cart.products[productIndex].quantity);
     if (cart.products[productIndex].quantity === 0) {
       cart.products = cart.products.filter(
         (productInfo) =>
@@ -213,17 +209,11 @@ router.get("/increase-product-quantity/:productId", async (req, res, next) => {
     .exec();
   const cart = currentUser.cart;
 
-  console.log(cart.products);
-
-  console.log(productId, selectedSize);
-
   const productIndex = cart.products.findIndex(
     (productInfo) =>
       productInfo.product._id.toString() === productId &&
       productInfo.selectedSize === selectedSize
   );
-
-  console.log(productIndex);
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity += 1;
@@ -355,11 +345,13 @@ router.post("/checkout", async (req, res, next) => {
 
   const [isSignedOut, firstNameInDb, userId, isAdmin] =
     await updateSignInStatus(req);
+  let nbCartElements = await getNumberOfCartElements(req);
   res.render("cart-related/cart-checkout", {
     isSignedOut,
     firstName: firstNameInDb,
     userId,
     isAdmin,
+    nbCartElements,
   });
 });
 

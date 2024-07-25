@@ -7,7 +7,7 @@
     {{#if orders.length}}
       {{#each orders}}
         <div class="order-box">
-          <h3>Order ID: {{this._id}}</h3>
+          <h3>Order: {{this.createdAt}}</h3>
           <p><strong>Status:</strong> {{this.status}}</p>
           <ul>
             {{#each this.cart.products}}
@@ -24,7 +24,6 @@
             {{this.shippingAddress.city}},
             {{this.shippingAddress.zipCode}},
             {{this.shippingAddress.country}}</p>
-          <p><strong>Submitted On:</strong> {{this.createdAt}}</p>
         </div>
       {{/each}}
     {{else}}
