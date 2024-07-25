@@ -1,6 +1,6 @@
 const express = require("express");
-const { updateSignInStatus } = require("../utils");
-const { getProductSummary } = require("../utils");
+const { updateSignInStatus, getProductSummary } = require("../utils");
+const isAdmin = require("../middleware/isAdmin");
 const Product = require("../models/Product.model");
 const router = express.Router();
 
@@ -8,7 +8,9 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   const products = await Product.find();
   const { minPrice, maxPrice, brands } = getProductSummary(products);
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
   res.render("products/all-products", {
     products,
     minPrice,
@@ -17,6 +19,7 @@ router.get("/", async (req, res, next) => {
     isSignedOut,
     firstName,
     userId,
+    isAdmin,
   });
 });
 
@@ -42,7 +45,9 @@ router.get("/filter", async (req, res, next) => {
   const products = await Product.find(filters);
   const allProducts = await Product.find();
   const { minPrice, maxPrice, brands } = getProductSummary(allProducts);
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
   res.render("products/all-products", {
     products,
     minPrice,
@@ -51,19 +56,119 @@ router.get("/filter", async (req, res, next) => {
     isSignedOut,
     firstName,
     userId,
+    isAdmin,
   });
+});
+
+/* Add product to inventory */
+router.get("/add", isAdmin, async (req, res, next) => {
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
+  res.render("products/add-product", {
+    isSignedOut,
+    firstName,
+    userId,
+    isAdmin,
+  });
+});
+
+router.post("/add", isAdmin, async (req, res, next) => {
+  console.log(req.body);
+  const {
+    name,
+    description,
+    price,
+    stock,
+    imageUrl,
+    availableSizes,
+    model,
+    brand,
+    color,
+  } = req.body;
+
+  const sizesArray = availableSizes
+    .split(",")
+    .map((size) => parseFloat(size.trim()));
+
+  await Product.create({
+    name,
+    description,
+    price,
+    stock,
+    imageUrl,
+    availableSizes: sizesArray,
+    model,
+    brand,
+    color,
+  });
+
+  res.redirect("/products");
+});
+
+/* Update product in inventory */
+router.get("/update/:id", isAdmin, async (req, res, next) => {
+  const productId = req.params.id;
+  const product = await Product.findById(`${productId}`);
+  const availableSizesString = product.availableSizes.join(",");
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
+  res.render("products/update-product", {
+    product,
+    availableSizesString,
+    isSignedOut,
+    firstName,
+    userId,
+    isAdmin,
+  });
+});
+
+router.post("/update/:id", isAdmin, async (req, res, next) => {
+  const productId = req.params.id;
+  const {
+    name,
+    description,
+    price,
+    stock,
+    imageUrl,
+    availableSizes,
+    model,
+    brand,
+    color,
+  } = req.body;
+
+  const sizesArray = availableSizes
+    .split(",")
+    .map((size) => parseFloat(size.trim()));
+
+  await Product.findByIdAndUpdate(productId, {
+    name,
+    description,
+    price,
+    stock,
+    imageUrl,
+    availableSizes: sizesArray,
+    model,
+    brand,
+    color,
+  });
+  res.redirect(`/products/${productId}`);
 });
 
 /* GET products page */
 router.get("/:id", async (req, res, next) => {
   const productId = req.params.id;
   const product = await Product.findById(`${productId}`);
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
   res.render("products/product-details", {
     product,
     isSignedOut,
     firstName,
     userId,
+    isAdmin,
   });
 });
 

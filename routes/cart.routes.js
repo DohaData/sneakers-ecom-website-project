@@ -50,7 +50,9 @@ router.get("/", async (req, res, next) => {
 
   // Set the time to midnight (00:00:00)
   estimatedShippingDate.setHours(0, 0, 0, 0);
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
   res.render("cart-related/cart", {
     cartItems,
     totalPrice: cart.products.reduce(
@@ -68,6 +70,7 @@ router.get("/", async (req, res, next) => {
     isSignedOut,
     firstName,
     userId,
+    isAdmin,
   });
 });
 
@@ -278,11 +281,13 @@ router.post("/checkout", async (req, res, next) => {
   currentUser.cart = cart._id;
 
   await currentUser.save();
-  const [isSignedOut, firstNameInDb, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstNameInDb, userId, isAdmin] =
+    await updateSignInStatus(req);
   res.render("cart-related/cart-checkout", {
     isSignedOut,
     firstName: firstNameInDb,
     userId,
+    isAdmin,
   });
 });
 

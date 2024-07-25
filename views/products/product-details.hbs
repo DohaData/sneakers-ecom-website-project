@@ -23,5 +23,12 @@
             <p>Quantity: <input type="number" name="quantity" value="1" min="1"></p>
             <button type="submit" class="btn btn-primary">Add to Cart</button>
         </form>
+
+        <!-- Form for updating product -->
+        {{#if isAdmin}}
+            <form action="/products/update/{{product._id}}" method="GET">
+                <button type="submit" class="btn btn-primary">Edit Product</button>
+            </form>
+        {{/if}}
     </div>
 </div>

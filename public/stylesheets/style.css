@@ -1046,3 +1046,67 @@ section.range-slider input[type="range"]::-moz-range-track {
     font-size: 18px;
   }
 }
+
+/* add product page */
+.add-product h1 {
+  font-size: 2.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.add-product {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.add-product .form-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.add-product .btn-primary {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.add-product .mb-3 {
+  margin-bottom: 1.5rem;
+}
+
+/* update product page */
+.update-product h1 {
+  font-size: 2.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.update-product {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.update-product .form-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.update-product .btn-primary {
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.update-product .mb-3 {
+  margin-bottom: 1.5rem;
+}
