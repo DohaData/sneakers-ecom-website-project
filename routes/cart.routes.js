@@ -1,5 +1,6 @@
 const express = require("express");
-const router = express.Router();
+const nodemailer = require("nodemailer");
+
 const { v4: uuidv4 } = require("uuid");
 
 const User = require("../models/User.model");
@@ -8,6 +9,8 @@ const Address = require("../models/Address.model");
 const Order = require("../models/Order.model");
 
 const { updateSignInStatus } = require("../utils");
+
+const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   if (!req.session.currentUserId) {
@@ -273,14 +276,83 @@ router.post("/checkout", async (req, res, next) => {
     estimatedDelivery: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   });
 
+  const output = `
+  <p>You have submitted an order</p>
+
+  <h3>Order Details</h3>
+  <ul>
+    <li>First Name: ${currentUser.firstName}</li>
+    <li>Last Name: ${currentUser.lastName}</li>
+    <li>Email: ${currentUser.email}</li>
+    <li>House Number: ${houseNumber}</li>
+    <li>Street: ${street}</li>
+    <li>City: ${city}</li>
+    <li>State: ${state}</li>
+    <li>Zip: ${zip}</li>
+    <li>Country: ${country}</li>
+    <li>Additional Info: ${additionalInfo}</li>
+  </ul>
+
+  <h3>Order</h3>
+  <ul>
+    ${currentUser.cart.products
+      .map(
+        (productInfo) =>
+          `<li>${productInfo.product.name} - ${productInfo.quantity} - ${productInfo.product.price}</li>`
+      )
+      .join("")}
+  </ul>
+
+  <h3>Estimated Delivery</h3>
+  <p>${new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toLocaleDateString(
+    "en-US",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  )}</p>
+
+  <h3>Thank you for shopping with us!</h3>
+`;
+
+  // Create a transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_USER, // your email
+      pass: process.env.EMAIL_PASS, // your email password
+    },
+  });
+
+  // Set up email data with unicode symbols
+  let mailOptions = {
+    from: process.env.EMAIL_USER, // sender address
+    to: currentUser.email, // list of receivers
+    subject: "Order Submitted", // Subject line
+    text: `First Name: ${currentUser.firstName}\nLast Name: ${currentUser.lastName}\nEmail: ${currentUser.email}\nHouse Number: ${houseNumber}\nStreet: ${street}\nCity: ${city}\nState: ${state}\nZip: ${zip}\nCountry: ${country}\nAdditional Info: ${additionalInfo}`, // plain text body
+    html: output, // html body
+  };
+
+  // Send mail with defined transport object
+  transporter.sendMail(mailOptions, async (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  });
+
   const cart = await Cart.create({
     products: [],
   });
   await cart.save();
-
   currentUser.cart = cart._id;
-
   await currentUser.save();
+
   const [isSignedOut, firstNameInDb, userId, isAdmin] =
     await updateSignInStatus(req);
   res.render("cart-related/cart-checkout", {
