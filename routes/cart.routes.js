@@ -49,8 +49,6 @@ router.get("/", async (req, res, next) => {
     return product;
   });
 
-  console.log(cartItems.map((product) => product.quantity));
-
   // Set the time to midnight (00:00:00)
   estimatedShippingDate.setHours(0, 0, 0, 0);
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
@@ -116,8 +114,6 @@ router.get("/add-product/:productId", async (req, res, next) => {
       productInfo.selectedSize === selectedSize
   );
 
-  console.log(productIndex);
-
   if (productIndex > -1) {
     cart.products[productIndex].quantity += quantity;
   } else {
@@ -179,11 +175,9 @@ router.get("/decrease-product-quantity/:productId", async (req, res, next) => {
       productInfo.selectedSize === selectedSize
   );
 
-  console.log(productIndex);
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity -= 1;
-    console.log(cart.products[productIndex].quantity);
     if (cart.products[productIndex].quantity === 0) {
       cart.products = cart.products.filter(
         (productInfo) =>
@@ -215,17 +209,11 @@ router.get("/increase-product-quantity/:productId", async (req, res, next) => {
     .exec();
   const cart = currentUser.cart;
 
-  console.log(cart.products);
-
-  console.log(productId, selectedSize);
-
   const productIndex = cart.products.findIndex(
     (productInfo) =>
       productInfo.product._id.toString() === productId &&
       productInfo.selectedSize === selectedSize
   );
-
-  console.log(productIndex);
 
   if (productIndex > -1) {
     cart.products[productIndex].quantity += 1;

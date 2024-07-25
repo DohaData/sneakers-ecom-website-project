@@ -12,7 +12,6 @@ router.get("/", async (req, res, next) => {
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
-  console.log(nbCartElements);
   res.render("products/all-products", {
     products,
     minPrice,
@@ -81,7 +80,6 @@ router.get("/add", isAdmin, async (req, res, next) => {
 });
 
 router.post("/add", isAdmin, async (req, res, next) => {
-  console.log(req.body);
   const {
     name,
     description,
