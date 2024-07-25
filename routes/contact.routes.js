@@ -1,19 +1,20 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const { updateSignInStatus } = require('../utils');
+const express = require("express");
+const nodemailer = require("nodemailer");
+const { updateSignInStatus } = require("../utils");
 const router = express.Router();
 
-
 // GET route for the contact page
-router.get('/', async (req, res) => {
-    const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
-    res.render('contact/contact', { isSignedOut, firstName, userId });
+router.get("/", async (req, res) => {
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
+  res.render("contact/contact", { isSignedOut, firstName, userId, isAdmin });
 });
 
 // Send Email
-router.post('/', (req, res) => {
-    const { name, email, phone, message } = req.body;
-    const output = `
+router.post("/", (req, res) => {
+  const { name, email, phone, message } = req.body;
+  const output = `
       <p>You have a new contact request</p>
       <h3>Contact Details</h3>
       <ul>
@@ -25,36 +26,44 @@ router.post('/', (req, res) => {
       <p>${message}</p>
     `;
 
-    // Create a transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: 'dohajoaquinironhack@gmail.com', // your email
-            pass: 'hjrt aret ccqs jdua',    // your email password
-        },
-    });
+  // Create a transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: "dohajoaquinironhack@gmail.com", // your email
+      pass: "hjrt aret ccqs jdua", // your email password
+    },
+  });
 
-    // Set up email data with unicode symbols
-    let mailOptions = {
-        from: `<${email}>`, // sender address
-        to: 'dohajoaquinironhack@gmail.com', // list of receivers
-        subject: 'New Contact Request', // Subject line
-        text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`, // plain text body
-        html: output, // html body
-    };
+  // Set up email data with unicode symbols
+  let mailOptions = {
+    from: `<${email}>`, // sender address
+    to: "dohajoaquinironhack@gmail.com", // list of receivers
+    subject: "New Contact Request", // Subject line
+    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`, // plain text body
+    html: output, // html body
+  };
 
-    // Send mail with defined transport object
-    transporter.sendMail(mailOptions, async (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
-        res.render('contact/contact', { msg: 'Email has been sent' , isSignedOut, firstName, userId});
+  // Send mail with defined transport object
+  transporter.sendMail(mailOptions, async (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: %s", info.messageId);
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+      req
+    );
+    res.render("contact/contact", {
+      msg: "Email has been sent",
+      isSignedOut,
+      firstName,
+      userId,
+      isAdmin,
     });
+  });
 });
 
 module.exports = router;
