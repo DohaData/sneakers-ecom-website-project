@@ -20,8 +20,10 @@ const { updateSignInStatus } = require("../utils");
 
 // GET /auth/signup
 router.get("/signup", isLoggedOut, async (req, res) => {
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
-  res.render("auth/signup", { firstName, isSignedOut, userId });
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
+  res.render("auth/signup", { firstName, isSignedOut, userId, isAdmin });
 });
 
 // POST /auth/signup
@@ -108,14 +110,18 @@ router.post("/signup", isLoggedOut, async (req, res) => {
 
 // GET /auth/login
 router.get("/login", isLoggedOut, async (req, res) => {
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
-  res.render("auth/login", { isSignedOut, firstName, userId });
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
+  res.render("auth/login", { isSignedOut, firstName, userId, isAdmin });
 });
 
 // POST /auth/login
 router.post("/login", isLoggedOut, async (req, res, next) => {
   const { email, password } = req.body;
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
 
   // Check that email, and password are provided
   if (email === "" || password === "") {
@@ -125,6 +131,7 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
       isSignedOut,
       firstName,
       userId,
+      isAdmin,
     });
   }
 
@@ -169,7 +176,9 @@ router.post("/login", isLoggedOut, async (req, res, next) => {
 
 // GET /auth/logout
 router.get("/logout", isLoggedIn, async (req, res) => {
-  const [isSignedOut, firstName, userId] = await updateSignInStatus(req);
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).render("auth/logout", {
@@ -177,6 +186,7 @@ router.get("/logout", isLoggedIn, async (req, res) => {
         isSignedOut,
         firstName,
         userId,
+        isAdmin,
       });
     }
 
