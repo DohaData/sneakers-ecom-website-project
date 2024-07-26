@@ -13,6 +13,7 @@
             {{#each this.cart.products}}
               <li class="border p-3 mb-2 rounded">
                 <p><strong>Product:</strong> {{this.product.name}}</p>
+                <p><strong>Size:</strong> {{this.selectedSize}}</p>
                 <p><strong>Quantity:</strong> {{this.quantity}}</p>
                 <p><strong>Price:</strong> ${{this.product.price}}</p>
               </li>
