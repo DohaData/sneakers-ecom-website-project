@@ -20,11 +20,12 @@ router.get("/", async (req, res, next) => {
   const endIndex = page * limit;
 
   const products = await Product.find().skip(startIndex).limit(limit);
+  const allProducts = await Product.find();
   const totalProducts = await Product.countDocuments();
 
   const totalPages = Math.ceil(totalProducts / limit);
 
-  const { minPrice, maxPrice, brands } = getProductSummary(products);
+  const { minPrice, maxPrice, brands } = getProductSummary(allProducts);
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
