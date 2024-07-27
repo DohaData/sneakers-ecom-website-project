@@ -175,7 +175,6 @@ router.get("/decrease-product-quantity/:productId", async (req, res, next) => {
       productInfo.selectedSize === selectedSize
   );
 
-
   if (productIndex > -1) {
     cart.products[productIndex].quantity -= 1;
     if (cart.products[productIndex].quantity === 0) {
@@ -267,45 +266,112 @@ router.post("/checkout", async (req, res, next) => {
   });
 
   const output = `
-  <p>You have submitted an order</p>
-
-  <h3>Order Details</h3>
-  <ul>
-    <li>First Name: ${currentUser.firstName}</li>
-    <li>Last Name: ${currentUser.lastName}</li>
-    <li>Email: ${currentUser.email}</li>
-    <li>House Number: ${houseNumber}</li>
-    <li>Street: ${street}</li>
-    <li>City: ${city}</li>
-    <li>State: ${state}</li>
-    <li>Zip: ${zip}</li>
-    <li>Country: ${country}</li>
-    <li>Additional Info: ${additionalInfo}</li>
-  </ul>
-
-  <h3>Order</h3>
-  <ul>
-    ${currentUser.cart.products
-      .map(
-        (productInfo) =>
-          `<li>${productInfo.product.name} - ${productInfo.quantity} - ${productInfo.product.price}</li>`
-      )
-      .join("")}
-  </ul>
-
-  <h3>Estimated Delivery</h3>
-  <p>${new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toLocaleDateString(
-    "en-US",
-    {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  )}</p>
-
-  <h3>Thank you for shopping with us!</h3>
-`;
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        color: #333;
+        line-height: 1.6;
+      }
+      .container {
+        width: 90%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h3 {
+        color: #007BFF;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      ul li {
+        background: #f9f9f9;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .product-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .product-name {
+        font-weight: bold;
+      }
+      .product-price {
+        color: #555;
+      }
+      .thank-you {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 1.2em;
+        color: #28A745;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>You have submitted an order.</p>
+  
+      <h3>Order Details</h3>
+      <ul>
+        <li><strong>First Name:</strong> ${currentUser.firstName}</li>
+        <li><strong>Last Name:</strong> ${currentUser.lastName}</li>
+        <li><strong>Email:</strong> ${currentUser.email}</li>
+        <li><strong>House Number:</strong> ${houseNumber}</li>
+        <li><strong>Street:</strong> ${street}</li>
+        <li><strong>City:</strong> ${city}</li>
+        <li><strong>State:</strong> ${state}</li>
+        <li><strong>Zip:</strong> ${zip}</li>
+        <li><strong>Country:</strong> ${country}</li>
+        <li><strong>Additional Info:</strong> ${additionalInfo || "N/A"}</li>
+      </ul>
+  
+      <h3>Order Summary</h3>
+      <ul class="product-list">
+        ${currentUser.cart.products
+          .map(
+            (productInfo) =>
+              `<li>
+                <span class="product-name">${productInfo.product.name}</span> 
+                <span>${
+                  productInfo.quantity
+                } x $${productInfo.product.price.toFixed(2)}</span>
+                <span class="product-price">$${(
+                  productInfo.quantity * productInfo.product.price
+                ).toFixed(2)}</span>
+              </li>`
+          )
+          .join("")}
+      </ul>
+  
+      <h3>Estimated Delivery</h3>
+      <p>${new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toLocaleDateString(
+        "en-US",
+        {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+      )}</p>
+  
+      <div class="thank-you">
+        <h3>Thank you for shopping with us!</h3>
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
 
   // Create a transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
