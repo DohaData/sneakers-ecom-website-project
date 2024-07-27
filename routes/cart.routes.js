@@ -68,14 +68,13 @@ router.get("/", async (req, res, next) => {
 
   let nbCartElements = await getNumberOfCartElements(req);
 
-  const countryFromIp = await getCountryFromIP(
-    req.headers["x-forwarded-for"]
-      ? req.headers["x-forwarded-for"].split(",")[0].trim()
-      : req.socket.remoteAddress
-  );
+  const ip = req.headers["x-forwarded-for"]
+    ? req.headers["x-forwarded-for"].split(",")[0].trim()
+    : req.socket.remoteAddress;
+
+  const countryFromIp = await getCountryFromIP(ip);
   console.log("countryFromIp", countryFromIp);
-  console.log("x-forwarded-for", req.headers["x-forwarded-for"]);
-  console.log("remoteAddress", req.socket.remoteAddress);
+  console.log("ip", ip);
   const defaultAddress = currentUser.address || {
     houseNumber: "",
     street: "",
