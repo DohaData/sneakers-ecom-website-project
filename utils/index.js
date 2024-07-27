@@ -1,3 +1,4 @@
+const fetch = require("node-fetch");
 const User = require("../models/User.model");
 
 function getProductSummary(products) {
@@ -32,8 +33,22 @@ async function getNumberOfCartElements(req) {
   return nbCartElements;
 }
 
+async function getCountryFromIP(ip) {
+  const response = await fetch(
+    `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.IP_GEOLOCATION_API_KEY}&ip=${ip}`
+  );
+  const data = await response.json();
+
+  if (data && data.country_name) {
+    return data.country_name;
+  }
+
+  return null;
+}
+
 module.exports = {
   getProductSummary,
   updateSignInStatus,
   getNumberOfCartElements,
+  getCountryFromIP,
 };
