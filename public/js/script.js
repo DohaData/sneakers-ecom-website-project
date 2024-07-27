@@ -109,14 +109,4 @@ document.addEventListener("DOMContentLoaded", () => {
       collapseElement.style.transform = "scaleY(0)";
     }, 10);
   });
-
-  const slider = document.querySelector(".slider");
-
-  slider.addEventListener("mouseover", () => {
-    slider.style.animationPlayState = "paused";
-  });
-
-  slider.addEventListener("mouseout", () => {
-    slider.style.animationPlayState = "running";
-  });
 });
