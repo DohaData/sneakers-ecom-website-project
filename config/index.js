@@ -56,6 +56,10 @@ module.exports = (app) => {
     return `$${parseFloat(amount).toFixed(2)}`;
   });
 
+  hbs.registerHelper('eq', function (a, b) {
+    return a === b;
+  });
+
   // Normalizes the path to the views folder
   app.set("views", path.join(__dirname, "..", "views"));
   // Sets the view engine to handlebars

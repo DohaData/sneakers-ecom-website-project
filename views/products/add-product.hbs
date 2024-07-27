@@ -8,96 +8,46 @@
 
     <div class="mb-3">
       <label for="description" class="form-label">Description</label>
-      <textarea
-        class="form-control"
-        id="description"
-        name="description"
-        rows="3"
-        required
-      ></textarea>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
     </div>
 
     <div class="mb-3">
       <label for="price" class="form-label">Price</label>
-      <input
-        type="number"
-        class="form-control"
-        id="price"
-        name="price"
-        required
-        min="0"
-        step="0.01"
-      />
+      <input type="number" class="form-control" id="price" name="price" required min="0" step="0.01" />
     </div>
 
     <div class="mb-3">
       <label for="stock" class="form-label">Stock</label>
-      <input
-        type="number"
-        class="form-control"
-        id="stock"
-        name="stock"
-        required
-        min="0"
-      />
+      <input type="number" class="form-control" id="stock" name="stock" required min="0" />
     </div>
 
     <div class="mb-3">
       <label for="image" class="form-label">Upload Image</label>
-      <input
-        type="file"
-        class="form-control"
-        id="image"
-        name="image"
-        required
-        accept="image/*"
-      />
+      <input type="file" class="form-control" id="image" name="image" required accept="image/*" />
     </div>
 
     <div class="mb-3">
-      <label for="availableSizes" class="form-label">Available Sizes
-        (comma-separated)</label>
-      <input
-        type="text"
-        class="form-control"
-        id="availableSizes"
-        name="availableSizes"
-        required
-        placeholder="e.g. 6,7,8"
-      />
+      <label for="availableSizes" class="form-label">Available Sizes (comma-separated)</label>
+      <input type="text" class="form-control" id="availableSizes" name="availableSizes" required placeholder="e.g. 6,7,8" />
     </div>
 
     <div class="mb-3">
       <label for="model" class="form-label">Model</label>
-      <input
-        type="text"
-        class="form-control"
-        id="model"
-        name="model"
-        required
-      />
+      <input type="text" class="form-control" id="model" name="model" required />
     </div>
 
     <div class="mb-3">
       <label for="brand" class="form-label">Brand</label>
-      <input
-        type="text"
-        class="form-control"
-        id="brand"
-        name="brand"
-        required
-      />
+      <select class="form-control" id="brand" name="brand" required>
+        {{#each brands}}
+          <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </select>
     </div>
 
     <div class="mb-3">
       <label for="color" class="form-label">Color</label>
-      <input
-        type="text"
-        class="form-control"
-        id="color"
-        name="color"
-        required
-      />
+      <input type="text" class="form-control" id="color" name="color" required />
     </div>
 
     <button type="submit" class="btn btn-primary">Add Product</button>
