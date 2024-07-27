@@ -39,6 +39,8 @@ async function getCountryFromIP(ip) {
   );
   const data = await response.json();
 
+  console.log('data', data);
+
   if (data && data.country_name) {
     return data.country_name;
   }
