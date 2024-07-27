@@ -1,10 +1,21 @@
+<div class="slider-container">
+  <div class="slider">
+    <div class="slide">
+      <img src="images/products-page-top-1.jpg" alt="Slide 1">
+    </div>
+    <div class="slide">
+      <img src="images/products-page-top-2.jpg" alt="Slide 2">
+    </div>
+  </div>
+</div>
+
 <div class="container mt-4">
   <!-- Filters -->
   <div class="row mb-4">
     <div class="col-12 filters">
       <h4>
         <button
-          class="btn btn-primary"
+          class="btn btn-primary animate-button"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#filtersCollapse"
@@ -14,7 +25,7 @@
           Filters
         </button>
       </h4>
-      <div class="collapse" id="filtersCollapse">
+      <div class="collapse animate-collapse" id="filtersCollapse">
         <form action="/products/filter" method="GET">
           <div class="form-group">
             <label for="price">Price:</label>
@@ -46,7 +57,13 @@
             <div class="checkbox-group">
               {{#each brands}}
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="brand" id="brand-{{@index}}" value="{{this}}">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="brand"
+                    id="brand-{{@index}}"
+                    value="{{this}}"
+                  />
                   <label class="form-check-label" for="brand-{{@index}}">
                     {{this}}
                   </label>
@@ -55,8 +72,9 @@
             </div>
           </div>
           <div class="filter-buttons">
-            <button type="submit" class="btn btn-primary">Apply Filters</button>
-            <a href="/products" class="btn btn-primary">Reset</a>
+            <button type="submit" class="btn btn-primary animate-button">Apply
+              Filters</button>
+            <a href="/products" class="btn btn-primary animate-button">Reset</a>
           </div>
         </form>
       </div>
@@ -66,7 +84,7 @@
   <div class="row">
     {{#if products}}
       {{#each products}}
-        <div class="col-md-4 product-card flex-column">
+        <div class="col-md-4 product-card flex-column animate-product-card">
           <div class="card">
             <a href="/products/{{_id}}">
               <img src="{{imageUrl}}" class="card-img-top" alt="{{name}}" />
@@ -87,7 +105,10 @@
                   {{/each}}
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary mt-2">Buy Now</button>
+              <button
+                type="submit"
+                class="btn btn-primary mt-2 animate-button"
+              >Buy Now</button>
             </form>
           </div>
         </div>
