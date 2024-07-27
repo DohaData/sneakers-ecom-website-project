@@ -9,7 +9,13 @@ router.get("/", async (req, res) => {
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
-  res.render("contact/contact", { isSignedOut, firstName, userId, isAdmin, nbCartElements });
+  res.render("contact/contact", {
+    isSignedOut,
+    firstName,
+    userId,
+    isAdmin,
+    nbCartElements,
+  });
 });
 
 // Send Email
@@ -52,8 +58,6 @@ router.post("/", (req, res) => {
     if (error) {
       return console.log(error);
     }
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
     const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
       req
     );
