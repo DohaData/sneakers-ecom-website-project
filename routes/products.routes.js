@@ -1,8 +1,16 @@
 const express = require("express");
-const { updateSignInStatus, getProductSummary, getNumberOfCartElements } = require("../utils");
+const {
+  updateSignInStatus,
+  getProductSummary,
+  getNumberOfCartElements,
+} = require("../utils");
 const isAdmin = require("../middleware/isAdmin");
 const Product = require("../models/Product.model");
+const { storage } = require("../config/cloudinaryConfig"); // Assuming cloudinaryConfig is in the config folder
+const multer = require("multer");
+
 const router = express.Router();
+const upload = multer({ storage });
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
@@ -79,13 +87,27 @@ router.get("/add", isAdmin, async (req, res, next) => {
   });
 });
 
-router.post("/add", isAdmin, async (req, res, next) => {
+// Add product to inventory
+router.get("/add", isAdmin, async (req, res, next) => {
+  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
+    req
+  );
+  let nbCartElements = await getNumberOfCartElements(req);
+  res.render("products/add-product", {
+    isSignedOut,
+    firstName,
+    userId,
+    isAdmin,
+    nbCartElements,
+  });
+});
+
+router.post("/add", isAdmin, upload.single("image"), async (req, res, next) => {
   const {
     name,
     description,
     price,
     stock,
-    imageUrl,
     availableSizes,
     model,
     brand,
@@ -95,6 +117,8 @@ router.post("/add", isAdmin, async (req, res, next) => {
   const sizesArray = availableSizes
     .split(",")
     .map((size) => parseFloat(size.trim()));
+
+  const imageUrl = req.file.path; // Use Cloudinary image URL
 
   await Product.create({
     name,
@@ -111,7 +135,7 @@ router.post("/add", isAdmin, async (req, res, next) => {
   res.redirect("/products");
 });
 
-/* Update product in inventory */
+// Update product in inventory
 router.get("/update/:id", isAdmin, async (req, res, next) => {
   const productId = req.params.id;
   const product = await Product.findById(`${productId}`);
@@ -131,37 +155,46 @@ router.get("/update/:id", isAdmin, async (req, res, next) => {
   });
 });
 
-router.post("/update/:id", isAdmin, async (req, res, next) => {
-  const productId = req.params.id;
-  const {
-    name,
-    description,
-    price,
-    stock,
-    imageUrl,
-    availableSizes,
-    model,
-    brand,
-    color,
-  } = req.body;
+router.post(
+  "/update/:id",
+  isAdmin,
+  upload.single("image"),
+  async (req, res, next) => {
+    const productId = req.params.id;
+    const {
+      name,
+      description,
+      price,
+      stock,
+      availableSizes,
+      model,
+      brand,
+      color,
+    } = req.body;
 
-  const sizesArray = availableSizes
-    .split(",")
-    .map((size) => parseFloat(size.trim()));
+    const sizesArray = availableSizes
+      .split(",")
+      .map((size) => parseFloat(size.trim()));
 
-  await Product.findByIdAndUpdate(productId, {
-    name,
-    description,
-    price,
-    stock,
-    imageUrl,
-    availableSizes: sizesArray,
-    model,
-    brand,
-    color,
-  });
-  res.redirect(`/products/${productId}`);
-});
+    let imageUrl = req.body.currentImageUrl; // Use existing image URL if no new image uploaded
+    if (req.file) {
+      imageUrl = req.file.path; // Use Cloudinary image URL
+    }
+
+    await Product.findByIdAndUpdate(productId, {
+      name,
+      description,
+      price,
+      stock,
+      imageUrl,
+      availableSizes: sizesArray,
+      model,
+      brand,
+      color,
+    });
+    res.redirect(`/products/${productId}`);
+  }
+);
 
 /* GET products page */
 router.get("/:id", async (req, res, next) => {
