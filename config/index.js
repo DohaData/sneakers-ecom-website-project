@@ -55,6 +55,7 @@ module.exports = (app) => {
 
   // Middleware that adds the IP address to the request object
   app.use(requestIp.mw());
+  app.set('trust proxy', true);
 
   // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are 😅
   app.use(
