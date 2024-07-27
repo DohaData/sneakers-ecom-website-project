@@ -14,12 +14,29 @@ const upload = multer({ storage });
 
 /* GET home page */
 router.get("/", async (req, res, next) => {
-  const products = await Product.find();
+  const page = parseInt(req.query.page) || 1;
+  const limit = 9; // Number of products per page
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const products = await Product.find().skip(startIndex).limit(limit);
+  const totalProducts = await Product.countDocuments();
+
+  const totalPages = Math.ceil(totalProducts / limit);
+
   const { minPrice, maxPrice, brands } = getProductSummary(products);
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
+
+  // Add this before rendering the template
+  const paginationPages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationPages.push({ number: i, active: i === page });
+  }
+
+  // Pass paginationPages to the template
   res.render("products/all-products", {
     products,
     minPrice,
@@ -30,6 +47,11 @@ router.get("/", async (req, res, next) => {
     userId,
     isAdmin,
     nbCartElements,
+    currentPage: page,
+    totalPages: totalPages,
+    paginationPages: paginationPages,
+    previousPage: page - 1,
+    nextPage: page + 1,
   });
 });
 
