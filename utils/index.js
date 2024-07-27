@@ -39,10 +39,6 @@ async function getCountryFromIP(ip) {
   );
   const data = await response.json();
 
-  console.log(`https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.IP_GEOLOCATION_API_KEY}&ip=${ip}`);
-
-  console.log('data', data);
-
   if (data && data.country_name) {
     return data.country_name;
   }

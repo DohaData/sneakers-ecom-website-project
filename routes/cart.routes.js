@@ -73,8 +73,6 @@ router.get("/", async (req, res, next) => {
     : req.socket.remoteAddress;
 
   const countryFromIp = await getCountryFromIP(ip);
-  console.log("countryFromIp", countryFromIp);
-  console.log("ip", ip);
   const defaultAddress = currentUser.address || {
     houseNumber: "",
     street: "",
@@ -435,8 +433,6 @@ router.post("/checkout", async (req, res, next) => {
     if (error) {
       return console.log(error);
     }
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   });
 
   const cart = await Cart.create({
