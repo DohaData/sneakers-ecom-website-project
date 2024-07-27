@@ -270,7 +270,76 @@ header {
   font-weight: 400;
 }
 
-/* Product Cards */
+/* Slider Container */
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 300px; /* Adjust the height as needed */
+  overflow: hidden;
+  margin-bottom: 20px; /* Space between slider and rest of the content */
+}
+
+/* Slider */
+.slider {
+  position: absolute;
+  width: 200%; /* 100% width per slide, 2 slides => 200% */
+  height: 100%;
+  display: flex;
+  animation: slide-horizontal 8s infinite; /* Duration of the animation cycle */
+}
+
+/* Slide */
+.slide {
+  width: 50%; /* Adjust width based on the number of slides */
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Slide Animation */
+@keyframes slide-horizontal {
+  0%,
+  25% {
+    transform: translateX(0);
+  }
+  50%,
+  75% {
+    transform: translateX(-50%); /* Move left by the width of one slide */
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Additional Styles */
+.promo-text {
+  color: #336699;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+.eco-tag {
+  color: #228b22;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.subtle-text {
+  color: #bdbdbd;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+}
+
+.background-highlight {
+  background-color: #f5f5f5;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+}
 
 .card {
   border: none;
@@ -341,12 +410,13 @@ header {
   background-color: #336699;
 }
 
-/* Filters */
 .filters {
   margin-bottom: 8px;
   background-color: #fff;
   border: 1px solid #ddd;
   padding: 20px;
+  background: url("https://www.transparenttextures.com/patterns/white-diamond.png"); /* Subtle background pattern */
+  background-color: #f5f5f5; /* Light grey color */
 }
 
 .filters h4 {
@@ -529,6 +599,259 @@ section.range-slider input[type="range"]::-moz-range-track {
   .product-card .card-text {
     font-size: 13px;
   }
+}
+
+section.range-slider {
+  position: relative;
+  width: 30vw;
+  margin: 8px 0;
+  /* Adjust margin for better spacing */
+  height: 16px;
+  /* Maintain height for thumb visibility */
+  text-align: left;
+  /* Align slider to the left */
+}
+
+section.range-slider p {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f5f5f5;
+  margin-bottom: 8px;
+  text-align: center;
+  /* Center text */
+}
+
+section.range-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
+  left: 0;
+  top: 50%;
+  /* Center vertically */
+  margin: 0;
+  padding: 0;
+  z-index: 2;
+  background: transparent;
+}
+
+section.range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: all;
+  width: 12px;
+  height: 12px;
+  background: #f5f5f5;
+  /* Dark grey thumb */
+  border: 2px solid #f5f5f5;
+  /* White border */
+  border-radius: 3px;
+  /* Rectangular with rounded corners */
+  cursor: pointer;
+  z-index: 3;
+  position: relative;
+  transform: rotate(45deg);
+  /* Make it a diamond */
+}
+
+section.range-slider input[type="range"]::-moz-range-thumb {
+  pointer-events: all;
+  width: 12px;
+  height: 12px;
+  background: #f5f5f5;
+  /* Dark grey thumb */
+  border: 2px solid #f5f5f5;
+  /* White border */
+  border-radius: 3px;
+  /* Rectangular with rounded corners */
+  cursor: pointer;
+  z-index: 3;
+  position: relative;
+  transform: rotate(45deg);
+  /* Make it a diamond */
+}
+
+section.range-slider input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  /* Thinner track */
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  z-index: 1;
+  position: relative;
+}
+
+section.range-slider input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  /* Thinner track */
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  z-index: 1;
+  position: relative;
+}
+
+.rangeValues {
+  position: relative;
+  z-index: 3;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+  /* Center text */
+  color: #333;
+  /* Dark grey text */
+}
+
+.filters .form-control {
+  width: 30vw;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filters select.form-control {
+  height: 40px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.filter-buttons a {
+  margin-left: 10px;
+}
+
+.filters h4 {
+  font-size: 14px;
+}
+
+.filters option {
+  font-size: 14px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .product-card .card {
+    flex: 1 0 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters {
+    padding: 15px;
+  }
+
+  .product-card .card-img-top {
+    height: 180px;
+  }
+
+  .product-card .card-title {
+    font-size: 16px;
+  }
+
+  .product-card .card-text {
+    font-size: 13px;
+  }
+}
+
+/* Product Page Annimation */
+/* Animations */
+@keyframes buttonHover {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes cardHover {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  100% {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes imgHover {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes collapseExpand {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Button Hover Effect */
+.animate-button {
+  transition: transform 0.3s ease;
+}
+
+.animate-button:hover {
+  animation: buttonHover 0.3s forwards;
+}
+
+/* Product Card Hover Effect */
+.animate-product-card .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.animate-product-card .card:hover {
+  animation: cardHover 0.3s forwards;
+}
+
+.animate-product-card .card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.animate-product-card .card-img-top:hover {
+  animation: imgHover 0.3s forwards;
+}
+
+/* Collapse Animation */
+.collapse.animate-collapse {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.collapse:not(.show).animate-collapse {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.collapse.show.animate-collapse {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
 }
 
 /*Style for the product page */

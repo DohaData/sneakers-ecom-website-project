@@ -86,3 +86,37 @@ window.onload = function () {
     form.submit();
   }
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  const collapseElement = document.querySelector("#filtersCollapse");
+
+  collapseElement.addEventListener("show.bs.collapse", () => {
+    collapseElement.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    collapseElement.style.opacity = "0";
+    collapseElement.style.transform = "scaleY(0)";
+    setTimeout(() => {
+      collapseElement.style.opacity = "1";
+      collapseElement.style.transform = "scaleY(1)";
+    }, 10);
+  });
+
+  collapseElement.addEventListener("hide.bs.collapse", () => {
+    collapseElement.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    collapseElement.style.opacity = "1";
+    collapseElement.style.transform = "scaleY(1)";
+    setTimeout(() => {
+      collapseElement.style.opacity = "0";
+      collapseElement.style.transform = "scaleY(0)";
+    }, 10);
+  });
+
+  const slider = document.querySelector(".slider");
+
+  slider.addEventListener("mouseover", () => {
+    slider.style.animationPlayState = "paused";
+  });
+
+  slider.addEventListener("mouseout", () => {
+    slider.style.animationPlayState = "running";
+  });
+});
