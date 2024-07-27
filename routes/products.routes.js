@@ -20,11 +20,12 @@ router.get("/", async (req, res, next) => {
   const endIndex = page * limit;
 
   const products = await Product.find().skip(startIndex).limit(limit);
+  const allProducts = await Product.find();
   const totalProducts = await Product.countDocuments();
 
   const totalPages = Math.ceil(totalProducts / limit);
 
-  const { minPrice, maxPrice, brands } = getProductSummary(products);
+  const { minPrice, maxPrice, brands } = getProductSummary(allProducts);
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
@@ -94,33 +95,21 @@ router.get("/filter", async (req, res, next) => {
   });
 });
 
-/* Add product to inventory */
-router.get("/add", isAdmin, async (req, res, next) => {
-  const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
-    req
-  );
-  let nbCartElements = await getNumberOfCartElements(req);
-  res.render("products/add-product", {
-    isSignedOut,
-    firstName,
-    userId,
-    isAdmin,
-    nbCartElements,
-  });
-});
-
 // Add product to inventory
 router.get("/add", isAdmin, async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
+  const allProducts = await Product.find();
+  const brands = getProductSummary(allProducts).brands;
   res.render("products/add-product", {
     isSignedOut,
     firstName,
     userId,
     isAdmin,
     nbCartElements,
+    brands,
   });
 });
 
@@ -166,6 +155,8 @@ router.get("/update/:id", isAdmin, async (req, res, next) => {
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
+  const allProducts = await Product.find();
+  const brands = getProductSummary(allProducts).brands;
   res.render("products/update-product", {
     product,
     availableSizesString,
@@ -174,6 +165,7 @@ router.get("/update/:id", isAdmin, async (req, res, next) => {
     userId,
     isAdmin,
     nbCartElements,
+    brands,
   });
 });
 
