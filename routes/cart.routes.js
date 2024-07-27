@@ -8,7 +8,7 @@ const Cart = require("../models/Cart.model");
 const Address = require("../models/Address.model");
 const Order = require("../models/Order.model");
 
-const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
+const { updateSignInStatus, getNumberOfCartElements, getCountryFromIP } = require("../utils");
 
 const router = express.Router();
 
@@ -38,6 +38,13 @@ router.get("/", async (req, res, next) => {
     })
     .populate("address")
     .exec();
+
+  if (!currentUser.cart) {
+    currentUser.cart = await Cart.create({
+      products: [],
+    });
+  }
+
   const cart = currentUser.cart;
 
   let estimatedShippingDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
@@ -54,7 +61,20 @@ router.get("/", async (req, res, next) => {
   const [isSignedOut, firstName, userId, isAdmin] = await updateSignInStatus(
     req
   );
+
   let nbCartElements = await getNumberOfCartElements(req);
+
+  const countryFromIp = await getCountryFromIP(req.clientIp);
+  const defaultAddress = currentUser.address || {
+    houseNumber: "",
+    street: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: countryFromIp || "",
+    additionalInfo: "",
+  };
+
   res.render("cart-related/cart", {
     cartItems,
     totalPrice: cart.products.reduce(
@@ -63,7 +83,7 @@ router.get("/", async (req, res, next) => {
       0
     ),
     estimatedShippingDate: estimatedShippingDate.toISOString().split("T")[0],
-    address: currentUser.address,
+    address: defaultAddress,
     personalInfo: {
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
@@ -106,6 +126,13 @@ router.get("/add-product/:productId", async (req, res, next) => {
       },
     })
     .exec();
+
+  if (!currentUser.cart) {
+    currentUser.cart = await Cart.create({
+      products: [],
+    });
+  }
+
   const cart = currentUser.cart;
 
   const productIndex = cart.products.findIndex(
