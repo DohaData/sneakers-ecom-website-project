@@ -8,7 +8,11 @@ const Cart = require("../models/Cart.model");
 const Address = require("../models/Address.model");
 const Order = require("../models/Order.model");
 
-const { updateSignInStatus, getNumberOfCartElements, getCountryFromIP } = require("../utils");
+const {
+  updateSignInStatus,
+  getNumberOfCartElements,
+  getCountryFromIP,
+} = require("../utils");
 
 const router = express.Router();
 
@@ -64,7 +68,9 @@ router.get("/", async (req, res, next) => {
 
   let nbCartElements = await getNumberOfCartElements(req);
 
-  const countryFromIp = await getCountryFromIP(req.clientIp);
+  const countryFromIp = await getCountryFromIP(
+    req.headers["x-forwarded-for"] || req.socket.remoteAddress
+  );
   const defaultAddress = currentUser.address || {
     houseNumber: "",
     street: "",
