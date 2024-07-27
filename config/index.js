@@ -25,11 +25,14 @@ const session = require("express-session");
 // https://www.npmjs.com/package/connect-mongo
 const MongoStore = require("connect-mongo");
 
-const requestIp = require('request-ip');
+const requestIp = require("request-ip");
+
+const hbs = require('hbs');
 
 // Connects the mongo uri to maintain the same naming structure
 const MONGO_URI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sneakers-ecom-website-project";
+  process.env.MONGODB_URI ||
+  "mongodb://127.0.0.1:27017/sneakers-ecom-website-project";
 
 // Middleware configuration
 module.exports = (app) => {
@@ -40,6 +43,18 @@ module.exports = (app) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
+
+  hbs.registerHelper("isGreater", function (value1, value2, options) {
+    if (value1 > value2) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+  });
+
+  hbs.registerHelper("formatCurrency", function (amount) {
+    return `$${parseFloat(amount).toFixed(2)}`;
+  });
 
   // Normalizes the path to the views folder
   app.set("views", path.join(__dirname, "..", "views"));
@@ -55,7 +70,7 @@ module.exports = (app) => {
 
   // Middleware that adds the IP address to the request object
   app.use(requestIp.mw());
-  app.set('trust proxy', true);
+  app.set("trust proxy", true);
 
   // ℹ️ Middleware that adds a "req.session" information and later to check that you are who you say you are 😅
   app.use(

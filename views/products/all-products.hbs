@@ -1,15 +1,15 @@
 <div class="slider-container">
   <div class="slider">
     <div class="slide slide-products">
-      <img src="images/products-page-top-1.jpg" alt="Slide 1">
+      <img src="/images/products-page-top-1.jpg" alt="Slide 1" />
     </div>
     <div class="slide slide-products">
-      <img src="images/products-page-top-2.jpg" alt="Slide 2">
+      <img src="/images/products-page-top-2.jpg" alt="Slide 2" />
     </div>
   </div>
 </div>
 
-<div class="container mt-4">
+<div class="container mt-4 products-grid">
   <!-- Filters -->
   <div class="row mb-4">
     <div class="col-12 filters">
@@ -80,6 +80,7 @@
       </div>
     </div>
   </div>
+
   <!-- Products Grid -->
   <div class="row">
     {{#if products}}
@@ -91,7 +92,7 @@
               <div class="card-body">
                 <h5 class="card-title">{{name}}</h5>
                 <p class="card-text">{{description}}</p>
-                <p class="card-text">Price: ${{price}}</p>
+                <p class="card-text">Price: {{formatCurrency price}}</p>
                 <p class="card-text">Model: {{model}}</p>
                 <p class="card-text">Brand: {{brand}}</p>
               </div>
@@ -117,4 +118,35 @@
       <p>No products matching the selection found</p>
     {{/if}}
   </div>
+
+    <!-- Pagination Links -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center mt-4">
+      {{#isGreater currentPage 1}}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="?page={{previousPage}}"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {{/isGreater}}
+
+      {{#each paginationPages}}
+        <li class="page-item {{#if active}}active{{/if}}">
+          <a class="page-link" href="?page={{this.number}}">{{this.number}}</a>
+        </li>
+      {{/each}}
+
+      {{#isGreater totalPages currentPage}}
+        <li class="page-item">
+          <a class="page-link" href="?page={{nextPage}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {{/isGreater}}
+    </ul>
+  </nav>
 </div>
