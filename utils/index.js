@@ -24,7 +24,7 @@ async function getNumberOfCartElements(req) {
         model: "Product",
       },
     });
-    nbCartElements = user.cart.products.reduce(
+    nbCartElements = user?.cart?.products.reduce(
       (total, productInfo) => total + productInfo.quantity,
       0
     );
