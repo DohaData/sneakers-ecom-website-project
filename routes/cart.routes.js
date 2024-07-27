@@ -73,6 +73,9 @@ router.get("/", async (req, res, next) => {
       ? req.headers["x-forwarded-for"].split(",")[0].trim()
       : req.socket.remoteAddress
   );
+  console.log("countryFromIp", countryFromIp);
+  console.log("x-forwarded-for", req.headers["x-forwarded-for"]);
+  console.log("remoteAddress", req.socket.remoteAddress);
   const defaultAddress = currentUser.address || {
     houseNumber: "",
     street: "",
