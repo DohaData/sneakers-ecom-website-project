@@ -8,7 +8,13 @@ router.get("/", async (req, res, next) => {
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
-  res.render("index", { isSignedOut, firstName, userId, isAdmin, nbCartElements });
+  res.render("index", {
+    isSignedOut,
+    firstName,
+    userId,
+    isAdmin,
+    nbCartElements,
+  });
 });
 
 module.exports = router;
