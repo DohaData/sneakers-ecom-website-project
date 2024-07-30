@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const nodemailer = require("nodemailer");
 const User = require("../models/User.model");
 
 function getProductSummary(products) {
@@ -46,9 +47,22 @@ async function getCountryFromIP(ip) {
   return null;
 }
 
+function createMailTransporter() {
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_USER, // your email from environment variable
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+}
+
 module.exports = {
   getProductSummary,
   updateSignInStatus,
   getNumberOfCartElements,
   getCountryFromIP,
+  createMailTransporter,
 };
