@@ -1,6 +1,4 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
-
 const { v4: uuidv4 } = require("uuid");
 
 const User = require("../models/User.model");
@@ -12,6 +10,7 @@ const {
   updateSignInStatus,
   getNumberOfCartElements,
   getCountryFromIP,
+  createMailTransporter,
 } = require("../utils");
 
 const router = express.Router();
@@ -409,15 +408,7 @@ router.post("/checkout", async (req, res, next) => {
   `;
 
   // Create a transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL_USER, // your email
-      pass: process.env.EMAIL_PASS, // your email password
-    },
-  });
+  let transporter = createMailTransporter();
 
   // Set up email data with unicode symbols
   let mailOptions = {

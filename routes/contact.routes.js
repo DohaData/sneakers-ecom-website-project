@@ -1,6 +1,10 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
-const { updateSignInStatus, getNumberOfCartElements } = require("../utils");
+
+const {
+  updateSignInStatus,
+  getNumberOfCartElements,
+  createMailTransporter,
+} = require("../utils");
 const router = express.Router();
 
 // GET route for the contact page
@@ -34,15 +38,7 @@ router.post("/", (req, res) => {
     `;
 
   // Create a transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL_USER, // your email from environment variable
-      pass: process.env.EMAIL_PASS, // your email password from environment variable
-    },
-  });
+  let transporter = createMailTransporter();
 
   // Set up email data with unicode symbols
   let mailOptions = {

@@ -121,7 +121,13 @@ router.get("/login", isLoggedOut, async (req, res) => {
     req
   );
   let nbCartElements = await getNumberOfCartElements(req);
-  res.render("auth/login", { isSignedOut, firstName, userId, isAdmin, nbCartElements });
+  res.render("auth/login", {
+    isSignedOut,
+    firstName,
+    userId,
+    isAdmin,
+    nbCartElements,
+  });
 });
 
 // POST /auth/login
